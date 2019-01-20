@@ -2,9 +2,14 @@
 
 namespace JBJ\Workflow\Workflow\Marking;
 
-use JBJ\Workflow\Event\Workflow\BackendEvent as Event;
-use JBJ\Workflow\Event\Workflow\BackendPersistEvent as PersistEvent;
-use Symfony\Component\Workflow\Marking;
+use JBJ\Workflow\Event\BackendEvent as Event;
+use JBJ\Workflow\Event\BackendPersistEvent as PersistEvent;
+use JBJ\Workflow\MarkingInterface;
+use JBJ\Workflow\Document\Marking;
+use JBJ\Workflow\MarkingStoreInterface;
+use JBJ\Workflow\Document\MarkingStore;
+use JBJ\Workflow\StoreCollectionInterface;
+use JBJ\Workflow\Document\StoreCollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -14,8 +19,8 @@ use Ramsey\Uuid\Uuid;
  * MultiTenantMarkingStoreBackend persists the markings for multiple workflows and
  * workflow subjects (tokens).
  */
-class MultiTenantMarkingStoreBackend implements MultiTenantMarkingStoreBackendInterface {
-    const MARKING_STORE_COLLECTION_NAME = 'workflow.marking-store-collection';
+class ShimmedBackend implements ShimmedBackendInterface {
+    const STORE_COLLECTION_NAME = 'workflow.marking-store-collection';
     const MARKING_STORE_NAME = 'workflow.marking-store';
 
     /**
@@ -24,27 +29,30 @@ class MultiTenantMarkingStoreBackend implements MultiTenantMarkingStoreBackendIn
     private $backendId;
 
     /**
-     * @var MarkingStoreCollection $markingStoreCollection
+     * @var StoreCollection $stores
      */
-    private $markingStoreCollection;
+    private $stores;
 
     /**
      * @var EventDispatcherInterface $dispatcher
      */
     private $dispatcher;
 
-    public function __construct(MarkingStoreCollection $markingStoreCollection = null, EventDispatcherInterface $dispatcher = null) {
-        $this->backendId = $this->createId('workflow.backend');
-        if (!$markingStoreCollection) {
-            $markingStoreCollectionId = $this->createId(self::MARKING_STORE_COLLECTION_NAME);
-            $markingStoreCollection = new MarkingStoreCollection($markingStoreCollectionId);
+    public function __construct(StoreCollectionInterface $stores = null, EventDispatcherInterface $dispatcher = null, string $backendId = '') {
+        if (empty($backendId)) {
+            $backendId = $this->createId('workflow.backend');
         }
-        $this->markingStoreCollection = $markingStoreCollection;
+        $this->backendId = $backendId;
+        if (!$stores) {
+            $storesId = $this->createId(self::STORE_COLLECTION_NAME);
+            $stores = new StoreCollection($backendId);
+        }
+        $this->stores = $stores;
         $this->dispatcher = $dispatcher;
     }
 
-    protected function getMarkingStoreCollection() {
-        return $this->markingStoreCollection;
+    protected function getStoreCollection() {
+        return $this->$stores;
     }
 
     /**
@@ -59,13 +67,13 @@ class MultiTenantMarkingStoreBackend implements MultiTenantMarkingStoreBackendIn
     /**
      * Get a workflow marking from the backend
      *
-     * @param string $markingStoreId
+     * @param string $storeId
      * @param string $markingId
      * @return Marking The workflow marking
      */
-    public function getMarking(string $markingStoreId, string $markingId) {
-        $stores = $this->getMarkingStoreCollection();
-        $store = $stores[$markingStoreId] ?? null;
+    public function getMarking(string $storeId, string $markingId) {
+        $stores = $this->getStoreCollection();
+        $store = $stores[$storeId] ?? null;
         if (!$store) {
             return null;
         }
@@ -77,22 +85,21 @@ class MultiTenantMarkingStoreBackend implements MultiTenantMarkingStoreBackendIn
     /**
      * Persist a workflow marking to the backend
      *
-     * @param string $markingStoreId
-     * @param string $markingId
+     * @param string $storeId
      * @param Marking $marking The workflow marking
      * @return self
      */
-    public function setMarking(string $markingStoreId, Marking $marking) {
-        $stores = $this->getMarkingStoreCollection();
-        $this->settingMark($markingStoreId, $marking, $stores);
-        $store = $stores[$markingStoreId] ?? null;
+    public function setMarking(string $storeId, MarkingInterface $marking) {
+        $stores = $this->getStoreCollection();
+        $this->settingMark($storeId, $marking, $stores); // multiple events
+        $store = $stores[$storeId] ?? null;
         if (!$store) {
-            $store = new MarkingCollection($markingStoreId);
+            $store = new MarkingStore($storeId);
             $stores[] = $store;
-            $this->newStore($markingStoreId, $marking, $stores);
+            $this->newStore($storeId, $marking, $stores); // event
         }
         $store[] = $marking;
-        $this->setMark($markingStoreId, $marking, $stores);
+        $this->setMark($storeId, $marking, $stores); // multiple events
         return $this;
     }
 
@@ -116,17 +123,17 @@ class MultiTenantMarkingStoreBackend implements MultiTenantMarkingStoreBackendIn
         return Uuid::uuid3(Uuid::NAMESPACE_DNS, $name);
     }
 
-    protected function createBackendEvent(string $markingStoreId, Marking $marking, MarkingStoreCollection $store) {
-        $event = new BackendEvent($markingStoreId, $marking, $stores);
+    protected function createBackendEvent(string $storeId, Marking $marking, StoreCollection $stores) {
+        $event = new Event($storeId, $marking, $stores);
         return $event;
     }
 
-    protected function createPersistEvent(string $markingStoreId, Marking $marking, MarkingStoreCollection $store) {
-        $event = new PersistEvent($markingStoreId, $marking, $stores);
+    protected function createPersistEvent(string $storeId, Marking $marking, StoreCollection $stores) {
+        $event = new PersistEvent($storeId, $marking, $stores);
         return $event;
     }
 
-    protected function dispatchBackendEvent($names, BackendEvent $event) {
+    protected function dispatchBackendEvent($names, Event $event) {
         $dispatcher = $this->dispatcher;
         if (!$dispatcher) {
             return;
@@ -143,26 +150,26 @@ class MultiTenantMarkingStoreBackend implements MultiTenantMarkingStoreBackendIn
         }
     }
 
-    protected function settingMark(string $markingStoreId, Marking $marking, MarkingCollection $stores = null) {
-        $event = $this->createBackendEvent($markingStoreId, $marking, $stores);
+    protected function settingMark(string $storeId, Marking $marking, StoreCollection $stores = null) {
+        $event = $this->createBackendEvent($storeId, $marking, $stores);
         $this->dispatchBackendEvent('mark.setting', $event);
         return $this;
     }
 
-    protected function newStore(string $markingStoreId, Marking $marking, MarkingCollection $stores = null) {
-        $event = $this->createBackendEvent($markingStoreId, $marking, $stores);
+    protected function newStore(string $storeId, Marking $marking, StoreCollection $stores = null) {
+        $event = $this->createBackendEvent($storeId, $marking, $stores);
         $this->dispatchBackendEvent('mark.newstore', $event);
         return $this;
     }
 
-    protected function markingSet(string $markingStoreId, Marking $marking, MarkingCollection $stores = null) {
-        $event = $this->createPersistEvent($markingStoreId, $marking, $stores);
+    protected function markingSet(string $storeId, Marking $marking, StoreCollection $stores = null) {
+        $event = $this->createPersistEvent($storeId, $marking, $stores);
         $this->dispatchBackendEvent('mark.persist', $event);
         if ($stores !== $event->getStores()) {
             $stores = $event->getStores();
             $this->stores = $stores;
         }
-        $event = $this->createBackendEvent($markingStoreId, $marking, $stores);
+        $event = $this->createBackendEvent($storeId, $marking, $stores);
         $this->dispatchBackendEvent('mark.set', $event);
         return $this;
     }

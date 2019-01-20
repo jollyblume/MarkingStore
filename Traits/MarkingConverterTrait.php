@@ -1,9 +1,9 @@
 <?php
 
-namespace JBJ\Workflow\Workflow\Marking;
+namespace JBJ\Workflow\Traits;
 
 trait MarkingConverterTrait {
-    protected function convertPlacesForBaseMarking(array $places) {
+    protected function convertPlacesToKeys(array $places) {
         if (empty($places)) {
             return $places;
         }

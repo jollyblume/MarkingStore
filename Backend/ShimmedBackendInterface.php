@@ -1,34 +1,34 @@
 <?php
 
-namespace JBJ\Workflow\Workflow\Marking;
+namespace JBJ\Workflow\Backend;
 
-use Symfony\Component\Workflow\Marking;
+use JBJ\Workflow\MarkingInterface;
 
-interface MultiTenantMarkingStoreBackendInterface {
+interface ShimmedBackendInterface {
     /**
      * Get the backendId
      *
      * @return string backendId
      */
     public function getBackendId();
-    
+
     /**
      * Get a workflow marking from the backend
      *
      * @param string $markingStoreId
      * @param string $markingId
-     * @return Marking The workflow marking
+     * @return MarkingInterface
      */
-    public function getMarking(string $markingStoreId, string $markingId);
+    public function getMarking(string $storeId, string $markingId);
 
     /**
      * Persist a workflow marking to the backend
      *
-     * @param string $markingStoreId
-     * @param Marking $marking The workflow marking
+     * @param string $storeId
+     * @param MarkingInterface $marking The workflow marking
      * @return self
      */
-    public function setMarking(string $markingStoreId, Marking $marking);
+    public function setMarking(string $storeId, MarkingInterface $marking);
 
     /**
      * Create a new Marking id

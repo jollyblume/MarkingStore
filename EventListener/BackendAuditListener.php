@@ -1,12 +1,12 @@
 <?php
 
-namespace JBJ\Workflow\Workflow;
+namespace JBJ\Workflow\EventListener;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use JBJ\Workflow\Workflow\BackendEvent as Event;
+use JBJ\Workflow\Event\BackendEvent as Event;
 
-class BackendAuditTrailListener implements EventSubscriberInterface
+class BackendAuditListener implements EventSubscriberInterface
 {
     private $logger;
 
@@ -17,23 +17,23 @@ class BackendAuditTrailListener implements EventSubscriberInterface
 
     public function onSetting(Event $event)
     {
-        foreach ($event->getTransition()->getFroms() as $place) {
-            $markingId = $event->getMarking()->getMarkingId();
-            $storeId = $event->getStoreId();
-            $this->logger->info(sprintf('Setting marking "%s" to store "%s".', $markingId, $storeId));
-        }
+        $markingId = $event->getMarking()->getMarkingId();
+        $storeId = $event->getStoreId();
+        $this->logger->info(sprintf('Setting marking "%s" to store "%s".', $markingId, $storeId));
     }
 
     public function onNewStore(Event $event)
     {
+        $markingId = $event->getMarking()->getMarkingId();
+        $storeId = $event->getStoreId();
         $this->logger->info(sprintf('New marking store created while setting marking "%s" to store "%s".'), $markingId, $storeId);
     }
 
     public function onSet(Event $event)
     {
-        foreach ($event->getTransition()->getTos() as $place) {
-            $this->logger->info(sprintf('Set marking "%s" to store "%s".', $markingId, $storeId));
-        }
+        $markingId = $event->getMarking()->getMarkingId();
+        $storeId = $event->getStoreId();
+        $this->logger->info(sprintf('Marking "%s" set to store "%s".', $markingId, $storeId));
     }
 
     public static function getSubscribedEvents()

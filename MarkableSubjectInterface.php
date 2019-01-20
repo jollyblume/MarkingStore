@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\Workflow;
+namespace JBJ\Workflow;
 
 /**
  * MarkableSubjectInterface
@@ -19,12 +19,12 @@ interface MarkableSubjectInterface {
      *
      * @return string markingId
      */
-    public function getMarkingId();
+    public function getSubjectId();
 
     /**
      * Set the subject's markingId
      *
      * @param
      */
-    public function setMarkingId(string $markingId);
+    public function setSubjectId(string $markingId);
 }
