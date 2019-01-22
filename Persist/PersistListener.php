@@ -51,7 +51,7 @@ class PersistListener implements EventSubscriberInterface
     protected function setPersistStatus(Event $event, string $status) {
         $isReadable = $this->isPersistStatusReadable($stores);
         if (!$isReadable) {
-            throw new \Exception('not readable');
+            throw new \JBJ\Common\Exception\FixMeException('not readable');
         }
         foreach ([self::STATUS_DISABLED, self::STATUS_PERSISTABLE, self::STATUS_MANAGED] as $allowed) {
             if ($allowed === $status) {
@@ -60,7 +60,7 @@ class PersistListener implements EventSubscriberInterface
                 return $this;
             }
         }
-        throw new \Exception('invalid status');
+        throw new \JBJ\Common\Exception\FixMeException('invalid status');
     }
 
     protected function isMigrationDisabled(Event $event) {
@@ -104,7 +104,7 @@ class PersistListener implements EventSubscriberInterface
         $this->setPersistStatus($event, self::STATUS_PERSISTABLE);
         $hasPath = $this->hasMigrationPath($event);
         if (!$hasPath) {
-            throw new \Exception('no migration path found');
+            throw new \JBJ\Common\Exception\FixMeException('no migration path found');
         }
         $stores = $this->executeMigration($event);
         if ($stores !== $event->getStores()) {
@@ -130,7 +130,7 @@ class PersistListener implements EventSubscriberInterface
             return;
         }
         if ($status === self::STATUS_PERSISTABLE) {
-            throw new \Exception('logic exception: should never start onPersist in this status');
+            throw new \JBJ\Common\Exception\FixMeException('logic exception: should never start onPersist in this status');
         }
         $isMigrated = $this->isMigrated($event);
         if ($status !== self::STATUS_MANAGED && $isMigrated) {

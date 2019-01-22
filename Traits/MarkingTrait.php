@@ -20,7 +20,7 @@ trait MarkingTrait {
     private $places;
 
     protected function markPlaces(array $places) {
-        $places = $this->convertPlacesToKeys($places)
+        $places = $this->convertPlacesToKeys($places);
         foreach ($places as $place => $nbToken) {
             $this->mark($place);
         }

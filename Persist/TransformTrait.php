@@ -36,7 +36,7 @@ trait TransformTrait {
             $subject = get_class($subject);
         }
         if (!class_exists($subject)) {
-            throw new \Exception('class not exists');
+            throw new \JBJ\Common\Exception\FixMeException('class not exists');
         }
         return $subject;
     }
@@ -89,7 +89,7 @@ trait TransformTrait {
 
     public function executeMigration(StoreCollectionInterface $originalStore) {
         if (!$this->hasMigrationPath($originalStore)) {
-            throw new \Exception('no execution path found');
+            throw new \JBJ\Common\Exception\FixMeException('no execution path found');
         }
         $storesId = $originalStore->getMarkingStoreCollectionId();
         $storeElements = $originalStore->toArray();
@@ -108,7 +108,7 @@ trait TransformTrait {
 
     public function persist(StoreCollectionInterface $store, string $markingStoreId, BaseMarking $marking) {
         if ($marking instanceof PhpcrMarking) {
-            throw new \Exception();
+            throw new \JBJ\Common\Exception\FixMeException();
         }
     }
 

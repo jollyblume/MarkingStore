@@ -142,7 +142,7 @@ class ShimmedBackend implements ShimmedBackendInterface {
             $names = [$names];
         }
         if (!is_array($names)) {
-            throw new \Exception('$names must be string or array');
+            throw new \JBJ\Common\Exception\FixMeException('$names must be string or array');
         }
         foreach ($names as $name) {
             $fqName = sprintf('backend.%s', $name);

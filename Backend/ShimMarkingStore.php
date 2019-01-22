@@ -34,7 +34,7 @@ use JBJ\Common\Traits\PropertyAccessorTrait;
  * identify this subject (token) throughout the marking store backend.
  */
 class ShimMarkingStore implements BaseMarkingStoreInterface, MarkingStoreInterface {
-    use PropertyAccessorTrait, MarkingConverterTrait { convertPlacesForBaseMarking as public; }
+    use PropertyAccessorTrait, MarkingConverterTrait { convertPlacesToKeys as public; }
 
     const MARKING_ID_PROPERTY = 'subectId';
     const MARKING_STORE_NAME = 'workflow.marking-store';
