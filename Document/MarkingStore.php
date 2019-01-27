@@ -1,27 +1,47 @@
 <?php
 
-namespace JBJ\Workflow\Workflow\Marking;
+namespace JBJ\Workflow\Document;
 
-use JBJ\Workflow\MarkingStoresInterface;
+use JBJ\Workflow\MarkingStoreInterface;
+use JBJ\Workflow\StoreCollectionInterface;
 use JBJ\Common\Collection\ArrayCollectionInterface;
-use JBJ\Common\Collection\KeyAwareCollectionTrait;
+use JBJ\Common\Collection\GraphCollectionTrait;
 
-class MarkingStore implements MarkingStoresInterface, ArrayCollectionInterface {
-    use KeyAwareCollectionTrait;
+class MarkingStore implements MarkingStoreInterface, ArrayCollectionInterface {
+    use GraphCollectionTrait;
 
-    private $storeId;
+    private $markingStoreId;
 
-    public function __construct(string $storeId, array $elements = []) {
-        $this->storeId = $storeId;
-        $this->setStrictCollectionMembership(true);
-        $this->setKeyAwarePropertyNames('markingId');
-        if ($elements) {
-            $this->initializeComposedChildren($elements);
-        }
+    private $stores;
+
+    public function __construct(string $markingStoreId, array $elements = []) {
+        $this->markingStoreId = $markingStoreId;
+        $rules = [
+            'name' => [
+                'markingId',
+                'isDisabled' => false,
+                'isValid' => true,
+            ],
+            'parent' => [
+                'markingStore',
+                'isDisabled' => false,
+                'isValid' => true,
+            ],
+        ];
+        $this->initCollection($elements, $rules, true, true);
     }
 
     public function getMarkingStoreId() {
-        $storeId = $this->storeId;
-        return storeId;
+        $markingStoreId = $this->markingStoreId;
+        return $markingStoreId;
+    }
+
+    public function getStores() {
+        return $this->stores;
+    }
+
+    public function setStores(?StoreCollectionInterface $stores) {
+        $this->stores = $stores;
+
     }
 }

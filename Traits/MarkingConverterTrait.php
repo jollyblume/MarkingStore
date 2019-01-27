@@ -3,11 +3,11 @@
 namespace JBJ\Workflow\Traits;
 
 trait MarkingConverterTrait {
-    protected function convertPlacesToKeys(array $places) {
+    public function convertPlacesToKeys(array $places) {
         if (empty($places)) {
             return $places;
         }
-        if (isset($places[0])) {
+        if (!is_integer(array_values($places)[0])) {
             $places = array_flip($places);
         }
         foreach ($places as $key => $value) {

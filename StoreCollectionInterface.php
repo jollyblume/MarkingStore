@@ -16,6 +16,6 @@ interface StoreCollectionInterface
      */
     public function getStoresId();
 
-    public function getStoresParent();
-    public function setStoresParent(ArrayCollectionInterface $stores);
+    public function getParent();
+    public function setParent(?ArrayCollectionInterface $stores);
 }

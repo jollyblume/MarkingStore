@@ -4,10 +4,11 @@ namespace JBJ\Workflow\Document;
 
 use JBJ\Workflow\BaseMarkingInterface;
 use JBJ\Workflow\MarkingInterface;
-use JBJ\Workflow\Traits\MarkingTrait;
+use JBJ\Workflow\MarkingStore;
+use JBJ\Workflow\Traits\MarkingConverterTrait;
 
 class Marking implements BaseMarkingInterface, MarkingInterface {
-    use MarkingTrait;
+    use MarkingConverterTrait;
 
     /**
      * Marking UUID
@@ -15,6 +16,13 @@ class Marking implements BaseMarkingInterface, MarkingInterface {
      * @var string $markingId
      */
     private $markingId;
+
+    /**
+     * Parent marking store
+     *
+     * @var MarkingStore
+     */
+    private $markingStore;
 
     /**
      * List of places
@@ -25,11 +33,7 @@ class Marking implements BaseMarkingInterface, MarkingInterface {
 
     public function __construct(string $markingId, array $places = []) {
         $this->markingId = $markingId;
-        $this->markPlaces($places);
-    }
-
-    protected function markPlaces(array $places) {
-        $places = $this->convertPlacesToKeys($places)
+        $places = $this->convertPlacesToKeys($places);
         foreach ($places as $place => $nbToken) {
             $this->mark($place);
         }
@@ -37,6 +41,14 @@ class Marking implements BaseMarkingInterface, MarkingInterface {
 
     public function getMarkingId() {
         return $this->markingId;
+    }
+
+    public function getMarkingStore() {
+        return $this->markingStore;
+    }
+
+    public function setMarkingStore(?MarkingStore $markingStore) {
+        $this->markingStore = $markingStore;
     }
 
     public function mark($place)
