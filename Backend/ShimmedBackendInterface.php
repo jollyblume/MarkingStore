@@ -4,7 +4,8 @@ namespace JBJ\Workflow\Backend;
 
 use JBJ\Workflow\MarkingInterface;
 
-interface ShimmedBackendInterface {
+interface ShimmedBackendInterface
+{
     /**
      * Get the backendId
      *

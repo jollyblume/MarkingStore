@@ -10,7 +10,8 @@ use JBJ\Workflow\Document\PhpcrMarking;
 use JBJ\Workflow\Workflow\Marking as BaseMarking;
 use Doctrine\Bundle\PHPCRBundle\ManagerRegistry;
 
-class PhpcrPersistStrategy implements PersistStrategyInterface {
+class PhpcrPersistStrategy implements PersistStrategyInterface
+{
     /**
      * @var ManagerRegistry $registry
      */
@@ -27,12 +28,14 @@ class PhpcrPersistStrategy implements PersistStrategyInterface {
      */
     private $migrationMap;
 
-    public function __construct(ManagerRegistry $registry, array $migrationMap = []) {
+    public function __construct(ManagerRegistry $registry, array $migrationMap = [])
+    {
         $this->registry = $registry;
         $this->migrationMap = $migrationMap;
     }
 
-    protected function getClassFromSubject($subject) {
+    protected function getClassFromSubject($subject)
+    {
         if (is_object($subject)) {
             $subject = get_class($subject);
         }
@@ -42,7 +45,8 @@ class PhpcrPersistStrategy implements PersistStrategyInterface {
         return $subject;
     }
 
-    protected function getMetadata(StoreCollectionInterface $store) {
+    protected function getMetadata(StoreCollectionInterface $store)
+    {
         $subject = $this->getClassFromSubject($store);
         $migrationMap = $this->migrationMap;
         if (!array_key_exists($subject, $migrationMap)) {
@@ -52,7 +56,8 @@ class PhpcrPersistStrategy implements PersistStrategyInterface {
         return $metadata;
     }
 
-    public function getMetadataValue(StoreCollectionInterface $store, string $key) {
+    public function getMetadataValue(StoreCollectionInterface $store, string $key)
+    {
         $metadata = $this->getMetadata($store);
         if (is_string($metadata) || !array_key_exists($key, $metadata)) {
             return null;
@@ -61,34 +66,39 @@ class PhpcrPersistStrategy implements PersistStrategyInterface {
         return $value;
     }
 
-    public function isMigrationDisabled(StoreCollectionInterface $store) {
+    public function isMigrationDisabled(StoreCollectionInterface $store)
+    {
         $isDisabled =
             '__DISABLED__' === $this->getMetadata($store) ||
             true === boolval($this->getMetadataValue('__DISABLED__'));
         return $isDisabled;
     }
 
-    public function isMigrationValid(StoreCollectionInterface $store) {
-        if($this->isDisabled($store)) {
+    public function isMigrationValid(StoreCollectionInterface $store)
+    {
+        if ($this->isDisabled($store)) {
             return false;
         }
         $isValid = true === boolval($this->getMetadataValue('__IS_VALID__'));
         return $isValid;
     }
 
-    public function isMigrated(StoreCollectionInterface $store) {
+    public function isMigrated(StoreCollectionInterface $store)
+    {
         $isFinal = '__FINAL__' === $this->getMetadata($store);
         return $isFinal;
     }
 
-    public function hasMigrationPath(StoreCollectionInterface $store) {
+    public function hasMigrationPath(StoreCollectionInterface $store)
+    {
         $hasPath =
             $this->isMigrationValid($store) &&
             !$this->isMigrated($store);
         return $hasPath;
     }
 
-    public function executeMigration(StoreCollectionInterface $originalStore) {
+    public function executeMigration(StoreCollectionInterface $originalStore)
+    {
         if (!$this->hasMigrationPath($originalStore)) {
             throw new \JBJ\Common\Exception\FixMeException('no execution path found');
         }
@@ -107,13 +117,14 @@ class PhpcrPersistStrategy implements PersistStrategyInterface {
         return $stores;
     }
 
-    public function persist(StoreCollectionInterface $store, string $markingStoreId, BaseMarking $marking) {
+    public function persist(StoreCollectionInterface $store, string $markingStoreId, BaseMarking $marking)
+    {
         if ($marking instanceof PhpcrMarking) {
             throw new \JBJ\Common\Exception\FixMeException();
         }
     }
 
-    public function flush() {
-
+    public function flush()
+    {
     }
 }

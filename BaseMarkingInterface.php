@@ -2,7 +2,8 @@
 
 namespace JBJ\Workflow;
 
-interface BaseMarkingInterface {
+interface BaseMarkingInterface
+{
     public function mark($place);
     public function unmark($place);
     public function has($place);

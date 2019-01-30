@@ -2,8 +2,10 @@
 
 namespace JBJ\Workflow\Traits;
 
-trait MarkingConverterTrait {
-    public function convertPlacesToKeys(array $places) {
+trait MarkingConverterTrait
+{
+    public function convertPlacesToKeys(array $places)
+    {
         if (empty($places)) {
             return $places;
         }

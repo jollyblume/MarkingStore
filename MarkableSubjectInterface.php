@@ -13,7 +13,8 @@ namespace JBJ\Workflow;
  * Any class that can use a PropertyAccessor to access a property named
  * 'markingId' is a valid subject or token.
  */
-interface MarkableSubjectInterface {
+interface MarkableSubjectInterface
+{
     /**
      * Get the subject's markingId
      *

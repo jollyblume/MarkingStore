@@ -33,7 +33,8 @@ use JBJ\Common\Traits\PropertyAccessorTrait;
  * UUID, called 'markingId'. This will only be injected once and will uniquely
  * identify this subject (token) throughout the marking store backend.
  */
-class ShimMarkingStore implements BaseMarkingStoreInterface, MarkingStoreInterface {
+class ShimMarkingStore implements BaseMarkingStoreInterface, MarkingStoreInterface
+{
     use PropertyAccessorTrait, MarkingConverterTrait { convertPlacesToKeys as public; }
 
     const MARKING_ID_PROPERTY = 'subectId';
@@ -54,7 +55,8 @@ class ShimMarkingStore implements BaseMarkingStoreInterface, MarkingStoreInterfa
      */
     private $backend;
 
-    public function __construct(ShimmedBackendInterface $backend, string $storeId = '') {
+    public function __construct(ShimmedBackendInterface $backend, string $storeId = '')
+    {
         $this->backend = $backend;
         if (!$storeId) {
             $storeId = $backend->createId(self::MARKING_STORE_NAME);
@@ -85,11 +87,13 @@ class ShimMarkingStore implements BaseMarkingStoreInterface, MarkingStoreInterfa
     *
     * @return string storeId
     */
-    public function getStoreId() :string {
+    public function getStoreId() :string
+    {
         return $this->storeId;
     }
 
-    protected function getBackend() {
+    protected function getBackend()
+    {
         return $this->backend;
     }
 
@@ -98,7 +102,8 @@ class ShimMarkingStore implements BaseMarkingStoreInterface, MarkingStoreInterfa
      *
      * @throws OutOfScopeException
      */
-    protected function assertValidSubject($subject) {
+    protected function assertValidSubject($subject)
+    {
         $isReadable = $this->isPropertyValueReadable($subject, self::MARKING_ID_PROPERTY);
         if (!$isReadable) {
             throw new OutOfScopeException("Subject's markingId is not readable");
@@ -118,7 +123,8 @@ class ShimMarkingStore implements BaseMarkingStoreInterface, MarkingStoreInterfa
      *                             implemented by the subject. The methods from
      *                             the interface must be implemented.
      */
-    public function getMarkingId($subject) {
+    public function getMarkingId($subject)
+    {
         $this->assertValidSubject($subject);
         $markingId = $this->getPropertyValue($subject, self::MARKING_ID_PROPERTY);
         if (empty($markingId)) {
@@ -142,7 +148,8 @@ class ShimMarkingStore implements BaseMarkingStoreInterface, MarkingStoreInterfa
      *                     Marking (inherited from BaseMarking) is returned when
      *                      results come from the backend.
      */
-    public function getMarking($subject) {
+    public function getMarking($subject)
+    {
         $storeId = $this->getStoreId();
         $markingId = $this->getMarkingId($subject);
         $backend = $this->getBackend();
@@ -164,7 +171,8 @@ class ShimMarkingStore implements BaseMarkingStoreInterface, MarkingStoreInterfa
      *                    The BaseMarking is converted to a Marking internally.
      * @return self
      */
-    public function setMarking($subject, BaseMarkingInterface $marking) {
+    public function setMarking($subject, BaseMarkingInterface $marking)
+    {
         $this->assertValidSubject($subject);
         $storeId = $this->getStoreId();
         $backend = $this->getBackend();

@@ -27,13 +27,15 @@ class PersistListener implements EventSubscriberInterface
         $this->strategy = $strategy;
     }
 
-    protected function isPersistStatusReadable(Event $event) {
+    protected function isPersistStatusReadable(Event $event)
+    {
         $stores = $event->getStores();
         $isReadable = $this->isPropertyValueReadable($stores, self::STATUS_PROPERTY_NAME);
         return $isReadable;
     }
 
-    protected function getPersistStatus(Event $event) {
+    protected function getPersistStatus(Event $event)
+    {
         $isReadable = $this->isPersistStatusReadable($event);
         if (!$isReadable) {
             return self::STATUS_DISABLED;
@@ -48,7 +50,8 @@ class PersistListener implements EventSubscriberInterface
         return self::STATUS_UNKNOWN;
     }
 
-    protected function setPersistStatus(Event $event, string $status) {
+    protected function setPersistStatus(Event $event, string $status)
+    {
         $isReadable = $this->isPersistStatusReadable($stores);
         if (!$isReadable) {
             throw new \JBJ\Common\Exception\FixMeException('not readable');
@@ -63,44 +66,52 @@ class PersistListener implements EventSubscriberInterface
         throw new \JBJ\Common\Exception\FixMeException('invalid status');
     }
 
-    protected function isMigrationDisabled(Event $event) {
+    protected function isMigrationDisabled(Event $event)
+    {
         $stores = $event->getStores();
         return $this->strategy->isMigrationDisabled($stores);
     }
 
-    protected function isMigrationValid(Event $event) {
+    protected function isMigrationValid(Event $event)
+    {
         $stores = $event->getStores();
         return $this->strategy->isMigrationValid($stores);
     }
 
-    protected function isMigrated(Event $event) {
+    protected function isMigrated(Event $event)
+    {
         $stores = $event->getStores();
         return $this->strategy->isMigrated($stores);
     }
 
-    protected function hasMigrationPath(Event $event) {
+    protected function hasMigrationPath(Event $event)
+    {
         $stores = $event->getStores();
         return $this->strategy->hasMigrationPath($stores);
     }
 
-    protected function executeMigration(Event $event) {
+    protected function executeMigration(Event $event)
+    {
         $stores = $event->getStores();
         return $this->strategy->executeMigration($stores);
     }
 
-    protected function persist(Event $event) {
+    protected function persist(Event $event)
+    {
         $stores = $event->getStores();
         $markingsId = $event->getMarkingStoreId();
         $marking = $event->getMarking();
         $this->strategy->persist($stores, $markingsId, $marking);
     }
 
-    protected function flush(Event $event) {
+    protected function flush(Event $event)
+    {
         $stores = $event->getStores();
         return $this->strategy->flush($stores);
     }
 
-    protected function handleStatusUnknown(Event $event) {
+    protected function handleStatusUnknown(Event $event)
+    {
         $this->setPersistStatus($event, self::STATUS_PERSISTABLE);
         $hasPath = $this->hasMigrationPath($event);
         if (!$hasPath) {
@@ -117,7 +128,8 @@ class PersistListener implements EventSubscriberInterface
         return $status;
     }
 
-    public function onPersist(Event $event) {
+    public function onPersist(Event $event)
+    {
         $strategy = $this->strategy;
         if (!$strategy) {
             // log persist disabled no strategy

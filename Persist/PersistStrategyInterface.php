@@ -5,7 +5,8 @@ namespace JBJ\Workflow\Persist;
 use JBJ\Workflow\StoreCollectionInterface;
 use JBJ\Workflow\MarkingInterface;
 
-interface PersistStrategyInterface {
+interface PersistStrategyInterface
+{
     public function isMigrationDisabled(StoreCollectionInterface $stores);
     public function isMigrationValid(StoreCollectionInterface $stores);
     public function isMigrated(StoreCollectionInterface $stores);

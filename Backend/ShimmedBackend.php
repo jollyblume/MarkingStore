@@ -19,7 +19,8 @@ use Ramsey\Uuid\Uuid;
  * MultiTenantMarkingStoreBackend persists the markings for multiple workflows and
  * workflow subjects (tokens).
  */
-class ShimmedBackend implements ShimmedBackendInterface {
+class ShimmedBackend implements ShimmedBackendInterface
+{
     const STORE_COLLECTION_NAME = 'workflow.marking-store-collection';
     const MARKING_STORE_NAME = 'workflow.marking-store';
 
@@ -38,7 +39,8 @@ class ShimmedBackend implements ShimmedBackendInterface {
      */
     private $dispatcher;
 
-    public function __construct(StoreCollectionInterface $stores = null, EventDispatcherInterface $dispatcher = null, string $backendId = '') {
+    public function __construct(StoreCollectionInterface $stores = null, EventDispatcherInterface $dispatcher = null, string $backendId = '')
+    {
         if (empty($backendId)) {
             $backendId = $this->createId('workflow.backend');
         }
@@ -51,7 +53,8 @@ class ShimmedBackend implements ShimmedBackendInterface {
         $this->dispatcher = $dispatcher;
     }
 
-    protected function getStoreCollection() {
+    protected function getStoreCollection()
+    {
         return $this->$stores;
     }
 
@@ -60,7 +63,8 @@ class ShimmedBackend implements ShimmedBackendInterface {
      *
      * @return string backendId
      */
-    public function getBackendId() {
+    public function getBackendId()
+    {
         return $this->backendId;
     }
 
@@ -71,7 +75,8 @@ class ShimmedBackend implements ShimmedBackendInterface {
      * @param string $markingId
      * @return Marking The workflow marking
      */
-    public function getMarking(string $storeId, string $markingId) {
+    public function getMarking(string $storeId, string $markingId)
+    {
         $stores = $this->getStoreCollection();
         $store = $stores[$storeId] ?? null;
         if (!$store) {
@@ -89,7 +94,8 @@ class ShimmedBackend implements ShimmedBackendInterface {
      * @param Marking $marking The workflow marking
      * @return self
      */
-    public function setMarking(string $storeId, MarkingInterface $marking) {
+    public function setMarking(string $storeId, MarkingInterface $marking)
+    {
         $stores = $this->getStoreCollection();
         $this->settingMark($storeId, $marking, $stores); // multiple events
         $store = $stores[$storeId] ?? null;
@@ -119,21 +125,25 @@ class ShimmedBackend implements ShimmedBackendInterface {
      * @return string UUID string
      * @throws \Ramsey\Uuid\Exception\UnsatisfiedDependencyException
      */
-    public function createId(string $name = 'workflow.general') :string {
+    public function createId(string $name = 'workflow.general') :string
+    {
         return Uuid::uuid3(Uuid::NAMESPACE_DNS, $name);
     }
 
-    protected function createBackendEvent(string $storeId, Marking $marking, StoreCollection $stores) {
+    protected function createBackendEvent(string $storeId, Marking $marking, StoreCollection $stores)
+    {
         $event = new Event($storeId, $marking, $stores);
         return $event;
     }
 
-    protected function createPersistEvent(string $storeId, Marking $marking, StoreCollection $stores) {
+    protected function createPersistEvent(string $storeId, Marking $marking, StoreCollection $stores)
+    {
         $event = new PersistEvent($storeId, $marking, $stores);
         return $event;
     }
 
-    protected function dispatchBackendEvent($names, Event $event) {
+    protected function dispatchBackendEvent($names, Event $event)
+    {
         $dispatcher = $this->dispatcher;
         if (!$dispatcher) {
             return;
@@ -150,19 +160,22 @@ class ShimmedBackend implements ShimmedBackendInterface {
         }
     }
 
-    protected function settingMark(string $storeId, Marking $marking, StoreCollection $stores = null) {
+    protected function settingMark(string $storeId, Marking $marking, StoreCollection $stores = null)
+    {
         $event = $this->createBackendEvent($storeId, $marking, $stores);
         $this->dispatchBackendEvent('mark.setting', $event);
         return $this;
     }
 
-    protected function newStore(string $storeId, Marking $marking, StoreCollection $stores = null) {
+    protected function newStore(string $storeId, Marking $marking, StoreCollection $stores = null)
+    {
         $event = $this->createBackendEvent($storeId, $marking, $stores);
         $this->dispatchBackendEvent('mark.newstore', $event);
         return $this;
     }
 
-    protected function markingSet(string $storeId, Marking $marking, StoreCollection $stores = null) {
+    protected function markingSet(string $storeId, Marking $marking, StoreCollection $stores = null)
+    {
         $event = $this->createPersistEvent($storeId, $marking, $stores);
         $this->dispatchBackendEvent('mark.persist', $event);
         if ($stores !== $event->getStores()) {

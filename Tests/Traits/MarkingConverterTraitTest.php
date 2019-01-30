@@ -5,8 +5,10 @@ namespace JBJ\Workflow\Tests\Traits;
 use PHPUnit\Framework\TestCase;
 use JBJ\Workflow\Traits\MarkingConverterTrait;
 
-class MarkingConverterTraitTest extends TestCase {
-    public function testConvertArrayPlaces() {
+class MarkingConverterTraitTest extends TestCase
+{
+    public function testConvertArrayPlaces()
+    {
         $mock = $this->getMockForTrait(MarkingConverterTrait::class);
         $places = ['testPlace'];
         $actualPlaces = $mock->convertPlacesToKeys($places);
@@ -14,7 +16,8 @@ class MarkingConverterTraitTest extends TestCase {
         $this->assertEquals($expectedPlaces, $actualPlaces);
     }
 
-    public function testConvertSymfonyPlaces() {
+    public function testConvertSymfonyPlaces()
+    {
         $mock = $this->getMockForTrait(MarkingConverterTrait::class);
         $places = ['testPlace' => 1];
         $actualPlaces = $mock->convertPlacesToKeys($places);
