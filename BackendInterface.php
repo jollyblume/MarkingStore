@@ -1,10 +1,8 @@
 <?php
 
-namespace JBJ\Workflow\Backend;
+namespace JBJ\Workflow;
 
-use JBJ\Workflow\MarkingInterface;
-
-interface ShimmedBackendInterface
+interface BackendInterface
 {
     /**
      * Get the backendId
