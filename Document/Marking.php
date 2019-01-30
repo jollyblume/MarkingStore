@@ -7,7 +7,8 @@ use JBJ\Workflow\MarkingInterface;
 use JBJ\Workflow\MarkingStore;
 use JBJ\Workflow\Traits\MarkingConverterTrait;
 
-class Marking implements BaseMarkingInterface, MarkingInterface {
+class Marking implements BaseMarkingInterface, MarkingInterface
+{
     use MarkingConverterTrait;
 
     /**
@@ -31,7 +32,8 @@ class Marking implements BaseMarkingInterface, MarkingInterface {
      */
     private $places;
 
-    public function __construct(string $markingId, array $places = []) {
+    public function __construct(string $markingId, array $places = [])
+    {
         $this->markingId = $markingId;
         $places = $this->convertPlacesToKeys($places);
         foreach ($places as $place => $nbToken) {
@@ -39,15 +41,18 @@ class Marking implements BaseMarkingInterface, MarkingInterface {
         }
     }
 
-    public function getMarkingId() {
+    public function getMarkingId()
+    {
         return $this->markingId;
     }
 
-    public function getMarkingStore() {
+    public function getMarkingStore()
+    {
         return $this->markingStore;
     }
 
-    public function setMarkingStore(?MarkingStore $markingStore) {
+    public function setMarkingStore(?MarkingStore $markingStore)
+    {
         $this->markingStore = $markingStore;
     }
 
