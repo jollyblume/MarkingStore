@@ -9,6 +9,6 @@ interface MarkingStoreInterface
      */
     public function getMarkingStoreId();
 
-    public function getStores();
-    public function setStores(?StoreCollectionInterface $stores);
+    // public function getStores();
+    // public function setStores(?StoreCollectionInterface $stores);
 }
