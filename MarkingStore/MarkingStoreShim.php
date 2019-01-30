@@ -49,10 +49,9 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $markingStoreId = $this->getMarkingStoreId();
         $subjectId = $this->getSubjectId($subject);
         $backend = $this->backend;
-        $marking = $backend->getMarking($markingStoreId, $subjectId);
-        if (!$marking) {
-            $marking = new Marking();
-        }
+        $places = $backend->getMarking($markingStoreId, $subjectId);
+        $places = $this->convertPlacesToKeys($places);
+        $marking = new Marking($places);
         return $marking;
     }
 
@@ -62,7 +61,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $markingStoreId = $this->getMarkingStoreId();
         $subjectId = $this->getSubjectId($subject);
         $backend = $this->backend;
-        $backend->setMarking($markingStoreId, $subjectId, $marking);
+        $backend->setMarking($markingStoreId, $subjectId, $marking->getPlaces());
     }
 
     protected function getSubjectId($subject)

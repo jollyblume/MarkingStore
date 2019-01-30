@@ -6,18 +6,21 @@ use Symfony\Component\EventDispatcher\Event as BaseEvent;
 
 class BackendEvent extends BaseEvent
 {
-    private $storeId;
-    private $marking;
-    public function __construct(string $storeId, Marking $marking)
+    private $markingStoreId;
+    private $subjectId;
+    private $places;
+
+    public function __construct(string $markingStoreId, string $subjectId, array $places = [])
     {
-        $this->storeId = $storeId;
-        $this->marking = $marking;
+        $this->markingStoreId = $markingStoreId;
+        $this->subjectId = $subjectId;
+        $this->places = $places;
     }
-    public function getStoreId()
+    public function getMarkingStoreId()
     {
-        return $this->storeId;
+        return $this->markingStoreId;
     }
-    public function getMarking()
+    public function getMarking(string $markingStoreId, string $subjectId)
     {
         return $this->marking;
     }
