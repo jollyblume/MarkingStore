@@ -24,7 +24,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $this->backend = $backend;
         $this->property = $property;
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
-        $markingStoreId = $backend->createId();
+        $this->markingStoreId = $backend->createId();
     }
 
     public function getMarkingStoreId()
