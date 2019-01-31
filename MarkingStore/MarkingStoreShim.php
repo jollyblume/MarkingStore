@@ -8,6 +8,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Ramsey\Uuid\Uuid;
+use JBJ\Workflow\Event\WorkflowEvent;
+use JBJ\Workflow\Event\StoreEvent;
 use JBJ\Workflow\MarkingStoreInterface;
 use JBJ\Workflow\Traits\MarkingConverterTrait;
 
@@ -26,9 +28,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $this->dispatcher = $dispatcher;
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
         $this->markingStoreId = $this->createId();
-
-        $event = new WorkflowEvent($markingStoreId, $subjectId);
-        $dispatcher = $this->dispatcher;
+        $event = new StoreEvent($this, $subjectId);
         $dispatcher->dispatch('workflow.store.created', $event);
     }
 
@@ -97,5 +97,10 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $dispatcher->dispatch('workflow.places.set', $event);
 
         $places = $this->convertPlacesToKeys($places);
+    }
+
+    protected function createId()
+    {
+        return Uuid::uuid4();
     }
 }

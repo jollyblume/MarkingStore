@@ -6,24 +6,13 @@ class StoreEvent extends WorkflowEvent
 {
     private $markingStore;
 
-    public function __construct(string $markingStoreId, string $subjectId, array $places = [])
+    public function __construct(MarkingStoreInterface $markingStore, string $subjectId, array $places = [])
     {
+        parent::__construct($markingStore->getMarkingStoreId(), $subjectId, $places);
         $this->markingStore = $markingStore;
     }
-    public function getMarkingStoreId()
+    public function getMarkingStore()
     {
-        return $this->markingStoreId;
-    }
-    public function getSubjectId()
-    {
-        return $this->subjectId;
-    }
-    public function getPlaces()
-    {
-        return $this->places;
-    }
-    public function setPlaces(array $places)
-    {
-        $this->places = $places;
+        return $this->markingStore;
     }
 }
