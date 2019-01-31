@@ -6,7 +6,8 @@ use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface as BaseStoreIn
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use JBJ\Workflow\BackendInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Ramsey\Uuid\Uuid;
 use JBJ\Workflow\MarkingStoreInterface;
 use JBJ\Workflow\Traits\MarkingConverterTrait;
 
@@ -14,17 +15,21 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 {
     use MarkingConverterTrait;
 
+    private $markingStoreId;
     private $property;
     private $propertyAccessor;
-    private $backend;
-    private $markingStoreId;
+    private $dispatcher;
 
-    public function __construct(BackendInterface $backend, string $property = 'subjectId', PropertyAccessorInterface $propertyAccessor = null )
+    public function __construct(string $property = 'subjectId', EventDispatcherInterface $dispatcher, PropertyAccessorInterface $propertyAccessor = null )
     {
-        $this->backend = $backend;
         $this->property = $property;
+        $this->dispatcher = $dispatcher;
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
-        $this->markingStoreId = $backend->createId();
+        $this->markingStoreId = $this->createId();
+
+        $event = new WorkflowEvent($markingStoreId, $subjectId);
+        $dispatcher = $this->dispatcher;
+        $dispatcher->dispatch('workflow.store.created', $event);
     }
 
     public function getMarkingStoreId()
@@ -39,29 +44,8 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $isReadable = $propertyAccessor->isReadable($subject, $property);
         $isWritable = $propertyAccessor->isWritable($subject, $property);
         if (!$isReadable || !$isWritable) {
-            throw new \JBJ\Common\Exception\FixMeException("SubjectId not readable");
+            throw new \JBJ\Common\Exception\FixMeException("SubjectId not readable or writable.");
         }
-    }
-
-    public function getMarking($subject)
-    {
-        $this->assertValidSubject($subject);
-        $markingStoreId = $this->getMarkingStoreId();
-        $subjectId = $this->getSubjectId($subject);
-        $backend = $this->backend;
-        $places = $backend->getMarking($markingStoreId, $subjectId);
-        $places = $this->convertPlacesToKeys($places);
-        $marking = new Marking($places);
-        return $marking;
-    }
-
-    public function setMarking($subject, Marking $marking)
-    {
-        $this->assertValidSubject($subject);
-        $markingStoreId = $this->getMarkingStoreId();
-        $subjectId = $this->getSubjectId($subject);
-        $backend = $this->backend;
-        $backend->setMarking($markingStoreId, $subjectId, $marking->getPlaces());
     }
 
     protected function getSubjectId($subject)
@@ -71,10 +55,47 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $propertyAccessor = $this->propertyAccessor;
         $subjectId = $propertyAccessor->getValue($subject, $property);
         if (!$subjectId) {
-            $backend = $this->backend;
-            $subjectId = $backend->createId();
+            $subjectId = $this->createId();
             $propertyAccessor->setValue($subject, $property, $subjectId);
         }
         return $subjectId;
+    }
+
+    public function getMarking($subject)
+    {
+        $this->assertValidSubject($subject);
+        $markingStoreId = $this->getMarkingStoreId();
+        $subjectId = $this->getSubjectId($subject);
+        $places = $this->getPlaces($markingStoreId, $subjectId);
+        $marking = new Marking($places);
+        return $marking;
+    }
+
+    public function setMarking($subject, Marking $marking)
+    {
+        $this->assertValidSubject($subject);
+        $markingStoreId = $this->getMarkingStoreId();
+        $subjectId = $this->getSubjectId($subject);
+        $this->setPlaces($markingStoreId, $subjectId, $marking->getPlaces());
+    }
+
+    protected function getPlaces(string $markingStoreId, string $subjectId)
+    {
+        $event = new WorkflowEvent($markingStoreId, $subjectId);
+        $dispatcher = $this->dispatcher;
+        $dispatcher->dispatch('workflow.places.get', $event);
+        $places = $this->convertPlacesToKeys($event->getPlaces());
+        return $places;
+    }
+
+    protected function setPlaces(string $markingStoreId, string $subjectId, array $places)
+    {
+        //todo need a regular transformer to return place to original pre transformed state.
+        $event = new WorkflowEvent($markingStoreId, $subjectId, $places);
+        $dispatcher = $this->dispatcher;
+        $dispatcher->dispatch('workflow.places.setting', $event);
+        $dispatcher->dispatch('workflow.places.set', $event);
+
+        $places = $this->convertPlacesToKeys($places);
     }
 }

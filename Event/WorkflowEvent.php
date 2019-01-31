@@ -4,7 +4,7 @@ namespace JBJ\Workflow\Event;
 
 use Symfony\Component\EventDispatcher\Event as BaseEvent;
 
-class BackendEvent extends BaseEvent
+class WorkflowEvent extends BaseEvent
 {
     private $markingStoreId;
     private $subjectId;
@@ -20,8 +20,16 @@ class BackendEvent extends BaseEvent
     {
         return $this->markingStoreId;
     }
-    public function getMarking(string $markingStoreId, string $subjectId)
+    public function getSubjectId()
     {
-        return $this->marking;
+        return $this->subjectId;
+    }
+    public function getPlaces()
+    {
+        return $this->places;
+    }
+    public function setPlaces(array $places)
+    {
+        $this->places = $places;
     }
 }

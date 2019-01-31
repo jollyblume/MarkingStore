@@ -3,7 +3,7 @@
 namespace JBJ\Workflow\EventListener;
 
 use Psr\Log\LoggerInterface;
-use JBJ\Workflow\Event\BackendEvent as Event;
+use JBJ\Workflow\Event\WorkflowEvent as Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PersistListener implements EventSubscriberInterface

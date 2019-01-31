@@ -4,7 +4,7 @@ namespace JBJ\Workflow\EventListener;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use JBJ\Workflow\Event\BackendEvent as Event;
+use JBJ\Workflow\Event\WorkflowEvent as Event;
 
 class AuditListener implements EventSubscriberInterface
 {
