@@ -20,7 +20,7 @@ class AuditListener implements EventSubscriberInterface
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
         $places = $event->getPlaces();
-        sprintf('Marking store "%s" created', $markingStoreId);
+        $this->logger->info(sprintf('Marking store "%s" created', $markingStoreId));
     }
 
     public function onGet(WorkflowEvent $event)
