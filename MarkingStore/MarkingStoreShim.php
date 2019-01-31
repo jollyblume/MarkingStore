@@ -73,7 +73,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $this->assertValidSubject($subject);
         $markingStoreId = $this->getMarkingStoreId();
         $subjectId = $this->getSubjectId($subject);
-        $this->setPlaces($markingStoreId, $subjectId, $marking->getPlaces());
+        $this->setPlaces($markingStoreId, $subjectId, array_keys($marking->getPlaces()));
     }
 
     protected function getPlaces(string $markingStoreId, string $subjectId)
@@ -87,6 +87,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 
     protected function setPlaces(string $markingStoreId, string $subjectId, array $places)
     {
+
         $event = new WorkflowEvent($markingStoreId, $subjectId, $places);
         $dispatcher = $this->dispatcher;
         $dispatcher->dispatch('workflow.places.setting', $event);
