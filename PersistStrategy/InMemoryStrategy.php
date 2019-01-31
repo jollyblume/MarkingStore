@@ -36,6 +36,6 @@ class InMemoryStrategy implements PersistStrategyInterface
         $collection[$index] = $places;
     }
 
-    public function flush()
+    public function cleanup()
     {}
 }

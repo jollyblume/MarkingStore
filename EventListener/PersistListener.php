@@ -45,7 +45,7 @@ class PersistListener implements EventSubscriberInterface
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
         $places = $event->getPlaces();
-        $this->strategy->flush($markingStoreId, $subjectId, $places);
+        $this->strategy->cleanup($markingStoreId, $subjectId, $places);
     }
 
     public static function getSubscribedEvents()

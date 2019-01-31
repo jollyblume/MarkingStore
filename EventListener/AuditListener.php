@@ -43,7 +43,7 @@ class AuditListener implements EventSubscriberInterface
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
         $places = $event->getPlaces();
-        $this->logger->info(sprintf('%s/%s flush request', $markingStoreId, $subjectId));
+        $this->logger->info(sprintf('%s/%s cleanup request', $markingStoreId, $subjectId));
     }
 
     public static function getSubscribedEvents()
