@@ -11,12 +11,9 @@ use Ramsey\Uuid\Uuid;
 use JBJ\Workflow\Event\WorkflowEvent;
 use JBJ\Workflow\Event\StoreEvent;
 use JBJ\Workflow\MarkingStoreInterface;
-use JBJ\Workflow\Traits\MarkingConverterTrait;
 
 class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 {
-    use MarkingConverterTrait;
-
     private $markingStoreId;
     private $property;
     private $propertyAccessor;
@@ -84,19 +81,16 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $event = new WorkflowEvent($markingStoreId, $subjectId);
         $dispatcher = $this->dispatcher;
         $dispatcher->dispatch('workflow.places.get', $event);
-        $places = $this->convertPlacesToKeys($event->getPlaces());
+        $places = $event->getPlaces();
         return $places;
     }
 
     protected function setPlaces(string $markingStoreId, string $subjectId, array $places)
     {
-        //todo need a regular transformer to return place to original pre transformed state.
         $event = new WorkflowEvent($markingStoreId, $subjectId, $places);
         $dispatcher = $this->dispatcher;
         $dispatcher->dispatch('workflow.places.setting', $event);
         $dispatcher->dispatch('workflow.places.set', $event);
-
-        $places = $this->convertPlacesToKeys($places);
     }
 
     protected function createId()
