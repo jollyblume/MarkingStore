@@ -1,18 +1,20 @@
 <?php
 
-namespace JBJ\Workflow\EventListener;
+namespace JBJ\Workflow\Workflow\Persist;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use JBJ\Workflow\Event\BackendEvent as Event;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AuditListener implements EventSubscriberInterface
+class PersistListener implements EventSubscriberInterface
 {
     private $logger;
+    private $strategy;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, PersistStrategyInterface $strategy = null)
     {
         $this->logger = $logger;
+        $this->strategy = $strategy;
     }
 
     public function onGet(Event $event)

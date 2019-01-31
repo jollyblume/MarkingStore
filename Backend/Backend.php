@@ -35,6 +35,7 @@ class Backend implements BackendInterface
     {
         BackendEvent($markingStoreId, $subjectId, $places);
         $dispatcher = $this->dispatcher;
+        $dispatcher->dispatch('workflow.backend.setting', $event);
         $dispatcher->dispatch('workflow.backend.set', $event);
     }
 
