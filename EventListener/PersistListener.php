@@ -3,7 +3,7 @@
 namespace JBJ\Workflow\EventListener;
 
 use Psr\Log\LoggerInterface;
-use JBJ\Workflow\Event\WorkflowEvent as Event;
+use JBJ\Workflow\Event\WorkflowEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PersistListener implements EventSubscriberInterface
@@ -17,24 +17,44 @@ class PersistListener implements EventSubscriberInterface
         $this->strategy = $strategy;
     }
 
-    public function onGet(Event $event)
+    public function onStoreCreated(WorkflowEvent $event)
     {
+        $markingStoreId = $event->getMarkingStoreId();
+        $subjectId = $event->getSubjectId();
+        $places = $event->getPlaces();
+        $this->strategy->storeCreated($markingStoreId, $subjectId, $places);
     }
 
-    public function onSetting(Event $event)
+    public function onGet(WorkflowEvent $event)
     {
+        $markingStoreId = $event->getMarkingStoreId();
+        $subjectId = $event->getSubjectId();
+        $this->strategy->getPlaces($markingStoreId, $subjectId);
     }
 
-    public function onSet(Event $event)
+    public function onSetting(WorkflowEvent $event)
     {
+        $markingStoreId = $event->getMarkingStoreId();
+        $subjectId = $event->getSubjectId();
+        $places = $event->getPlaces();
+        $this->strategy->setPlaces($markingStoreId, $subjectId, $places);
+    }
+
+    public function onSet(WorkflowEvent $event)
+    {
+        $markingStoreId = $event->getMarkingStoreId();
+        $subjectId = $event->getSubjectId();
+        $places = $event->getPlaces();
+        $this->strategy->flush($markingStoreId, $subjectId, $places);
     }
 
     public static function getSubscribedEvents()
     {
         return [
-            'workflow.backend.get' => ['onGet'],
-            'workflow.backend.setting' => ['onSetting'],
-            'workflow.backend.set' => ['onSet'],
+            'workflow.store.created' => ['onStoreCreated'],
+            'workflow.places.get' => ['onGet'],
+            'workflow.places.setting' => ['onSetting'],
+            'workflow.places.set' => ['onSet'],
         ];
     }
 }
