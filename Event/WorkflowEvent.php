@@ -10,7 +10,7 @@ class WorkflowEvent extends BaseEvent
     private $subjectId;
     private $places;
 
-    public function __construct(string $markingStoreId, string $subjectId, array $places = [])
+    public function __construct(string $markingStoreId, string $subjectId = '', array $places = [])
     {
         $this->markingStoreId = $markingStoreId;
         $this->subjectId = $subjectId;

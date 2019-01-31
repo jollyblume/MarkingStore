@@ -3,14 +3,13 @@
 namespace JBJ\Workflow\Tests\MarkingStore;
 
 use Symfony\Component\Workflow\Marking;
-use JBJ\Workflow\BackendInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use JBJ\Common\Validator\UuidValidator;
 use JBJ\Workflow\MarkingStore\MarkingStoreShim;
 use PHPUnit\Framework\TestCase;
 
 class MarkingStoreShimTest extends TestCase
 {
-    const UUID = 'daf3147e-46de-4dbe-bd6e-64f6bd6edc21';
-
     protected function createAcceptableSubject()
     {
         $subject = new class()
@@ -54,35 +53,36 @@ class MarkingStoreShimTest extends TestCase
         return $subject;
     }
 
-    protected function createBackendMock(Marking $marking = null)
-    {
-        $backend = $this->getMockBuilder(BackendInterface::class)->getMock();
-        $backend->method('getMarking')->willReturn($marking);
-        $backend->method('createId')->willReturn(self::UUID);
-        return $backend;
+    private $dispatcher;
+    protected function getDispatcher() {
+        $dispatcher = $this->dispatcher;
+        if (null === $dispatcher) {
+            $dispatcher = new EventDispatcher();
+            $this->dispatcher = $dispatcher;
+        }
+        return $dispatcher;
     }
 
     public function testGetMarkingStoreId()
     {
-        $backend = $this->createBackendMock();
-        $store = new MarkingStoreShim($backend);
-        $this->assertEquals(self::UUID, $store->getMarkingStoreId());
+        $validator = new UuidValidator();
+        $store = new MarkingStoreShim($this->getDispatcher());
+        $this->assertTrue($validator->validate($store->getMarkingStoreId()));
     }
 
     public function testGetMarkingSetsSubjectIdIfNotSet()
     {
-        $backend = $this->createBackendMock();
-        $store = new MarkingStoreShim($backend);
+        $store = new MarkingStoreShim($this->getDispatcher());
         $subject = $this->createAcceptableSubject();
         $marking = $store->getMarking($subject);
         $this->assertInstanceOf(Marking::class, $marking);
-        $this->assertEquals(self::UUID, $subject->getSubjectId());
+        $validator = new UuidValidator();
+        $this->assertTrue($validator->validate($subject->getSubjectId()));
     }
 
     public function testGetMarkingNotSetSubjectIdIfSet()
     {
-        $backend = $this->createBackendMock();
-        $store = new MarkingStoreShim($backend);
+        $store = new MarkingStoreShim($this->getDispatcher());
         $subject = $this->createAcceptableSubject();
         $uuid = '6562eddd-227d-4b94-ba4c-70b94e4101c9';
         $subject->setSubjectId($uuid);
@@ -92,18 +92,17 @@ class MarkingStoreShimTest extends TestCase
 
     public function testSetMarkingSetsSubjectIdIfNotSet()
     {
-        $backend = $this->createBackendMock();
-        $store = new MarkingStoreShim($backend);
+        $store = new MarkingStoreShim($this->getDispatcher());
         $subject = $this->createAcceptableSubject();
         $marking = new Marking();
         $store->setMarking($subject, $marking);
-        $this->assertEquals(self::UUID, $subject->getSubjectId());
+        $validator = new UuidValidator();
+        $this->assertTrue($validator->validate($subject->getSubjectId()));
     }
 
     public function testSetMarkingNotSetSubjectIdIfSet()
     {
-        $backend = $this->createBackendMock();
-        $store = new MarkingStoreShim($backend);
+        $store = new MarkingStoreShim($this->getDispatcher());
         $subject = $this->createAcceptableSubject();
         $uuid = '6562eddd-227d-4b94-ba4c-70b94e4101c9';
         $subject->setSubjectId($uuid);
@@ -117,8 +116,7 @@ class MarkingStoreShimTest extends TestCase
      */
     public function testGetMarkingThrowsIfSubjectNotReadable()
     {
-        $backend = $this->createBackendMock();
-        $store = new MarkingStoreShim($backend);
+        $store = new MarkingStoreShim($this->getDispatcher());
         $subject = $this->createUnreadableSubject();
         $marking = $store->getMarking($subject);
     }
@@ -128,8 +126,7 @@ class MarkingStoreShimTest extends TestCase
      */
     public function testGetMarkingThrowsIfSubjectNotWritable()
     {
-        $backend = $this->createBackendMock();
-        $store = new MarkingStoreShim($backend);
+        $store = new MarkingStoreShim($this->getDispatcher());
         $subject = $this->createUnwritableSubject();
         $marking = $store->getMarking($subject);
     }
