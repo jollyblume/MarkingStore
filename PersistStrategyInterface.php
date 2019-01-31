@@ -1,9 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\PersistStrategy;
-
-use JBJ\Workflow\StoreCollectionInterface;
-use JBJ\Workflow\MarkingInterface;
+namespace JBJ\Workflow;
 
 interface PersistStrategyInterface
 {
