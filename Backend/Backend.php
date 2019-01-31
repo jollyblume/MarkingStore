@@ -41,6 +41,6 @@ class Backend implements BackendInterface
 
     public function createId() :string
     {
-        .return Uuid::uuid4();
+        return Uuid::uuid4();
     }
 }

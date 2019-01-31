@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\Workflow\Persist;
+namespace JBJ\Workflow\EventListener;
 
 use Psr\Log\LoggerInterface;
 use JBJ\Workflow\Event\BackendEvent as Event;
