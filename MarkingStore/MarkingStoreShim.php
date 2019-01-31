@@ -19,10 +19,13 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
     private $propertyAccessor;
     private $dispatcher;
 
-    public function __construct(string $property = 'subjectId', EventDispatcherInterface $dispatcher, PropertyAccessorInterface $propertyAccessor = null )
+    public function __construct(EventDispatcherInterface $dispatcher, string $property = 'subjectId', PropertyAccessorInterface $propertyAccessor = null )
     {
-        $this->property = $property;
         $this->dispatcher = $dispatcher;
+        $this->property = $property;
+        if ('marking' === $property) {
+            throw new JBJ\Common\Exception\FixMeException('property named "marking" is reserved for symfony/workflow');
+        }
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
         $this->markingStoreId = $this->createId();
         $event = new StoreEvent($this, $subjectId);
