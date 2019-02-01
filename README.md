@@ -12,8 +12,6 @@ I do not intend to release a 1.0 version until these todo's are complete.
 ## Install via composer
    composer.phar require jollyblume/workflow
 
-   NOTE: This library is not currently defined on Packagist, and can not currently be installed via composer.
-
 ## Library overview
 This library implements a multi-tenant marking store meeting the requirements for a symfony/workflow marking store.
 
