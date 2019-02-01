@@ -2,7 +2,7 @@ Multi-tenant Workflow Marking Store Component
 =============================================
 
 ## General library status
-The code base is stable and it's interfaces are not going to be changing. Unit tests are far from complete and many tests remain to be written. Existing test provide a credible level of code quality for development use. I don't expect any bugs
+The code base is stable and it's interfaces are not going to be changing. Unit tests are far from complete, many tests remain to be written. Existing tests provide a credible level of code quality for development use. I don't expect any bugs
 in the current code base. Of course, everyone knows how foolish that notion is until test units are complete...
 
 This README needs to be completed, as do code docblocks.
@@ -49,11 +49,13 @@ Of particular interest are several sites describing standard workflow design pat
 ### A word about workflows and state machines
 I've seen a lot of workflow systems try to implement a state machine as if it were a counterpart of the marking store. This concept will break the design of any workflow system, because the idea of state in a workflow is misunderstood.
 
-By definition and design, the state of a single transition rarely impacts the state of another transition. The state most commonly shared occurs during a **transition**, where state at one **place** causes some state in the next **place**.
+By definition and design, the state of a single transition rarely impacts the state of another transition. The state most commonly shared occurs during a **transition**, where state at one **place** causes some state in the next **place**. This feature is also largely responsible for a workflow to be (at least mathematically) reversible.
 
 State machine mechanics don't belong anywhere in the workflow core. They are more closely related to a subject, where global state takes on relevance in the context of a subject or group of subjects places and inter-place relationships within a workflow.
 
 I intend to implement a state machine architecture for subjects down the road. State Machines are an important workflow tool. But the conversations belong in some application view of the workflow. It is not a subject for this component, however.
+
+My initial conept for a state machine involves creating state controlling **workflow(s)**, where the **subject(s)** for this **workflow(s)** is an internal implementation detail. I expect this, or a similar solution, will allow a clean state machine implementation that is largely independant of any workflow or subject interface. It will also have the benefit of any analytics and management tools built for a workflow system as a whole.
 
 ### Why this component
 The symfony/workflow component is a framework for building workflow systems. It includes an elegant marking store interface, but only a minimal marking store implementation.
