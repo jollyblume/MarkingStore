@@ -10,20 +10,22 @@ This README needs to be completed, as do code docblocks.
 I do not intend to release a 1.0 version until these todo's are complete.
 
 ## Install via composer
-   composer.phar require jollyblume/workflow
+   composer.phar require jollyblume/workflow:@dev
 
 ## Library overview
 This library implements a multi-tenant marking store meeting the requirements for a symfony/workflow marking store.
 
-It is dependant on several 3rd party vendors:
+It is dependant on a few 3rd party vendors:
 * symfony/workflow
 * symfony/property-access
 * symfony/event-dispatcher
 * jollyblume/common
 
+jollyblume/common is only included to support the InMemoryPeristStrategy and can be considered an implementation detail. This strategy is only included to provide compatibility with swf's InMemoryMarkingStore, symfony's default marking store implementation. Persistence strategies should be developed in isolated libraries. The InMemoryPersistStrategy dilutes the focus of this component, but provides a good reference implementation.
+
 ## Petri Nets and Symfony Workflow and This Component
 ### A super quick overview
-Petri Nets have been used to descibe workflow systems since the 1960's. They have been studied deeply since and proven to provide superior workflow analytics.
+Petri Nets have been used to descibe workflow systems since the 1960's. They have been studied deeply since and proven to provide superior workflow analytics and monitoring, along with advanced workflow design patterns.
 
 The Petri Net model defines a few standard interfaces used to descibe a workflow and track a token as it is processed by that workflow:
 * **Tokens** are the objects being tracked as it proceeds through a workflow. The symfony/workflow component uses the term *subject* in place of the traditional *token*. A symfony *subject* has minimal requirements to be considered valid workflow tokens. These requirements are discussed below. I am likely to use the terms *token* and *subject* interchangeably.  I will clean this language up during a future review cycle.
@@ -60,7 +62,7 @@ The symfony/workflow component is a framework for building workflow systems. It 
 
 Its implementation stores a marking on a public property of the subject's class. It a solid and super-simple implementation. However, because the marking store is stored directly on the subject, allowing a subject to participate in multiple workflow simultaneously can be complicated.
 
-This component is focused on tracking an unbounded number of workflows a subject can participate simultaneously. In addition, it describes a simple marking store persistence architecture.
+This component is focused on tracking an unbounded number of workflows a subject can participate simultaneously. In addition, it describes a simple marking store persistence architecture. This marking store enables important workflow definition and management features, such as recursive workflows.
 
 ### Component goals
 General goals and requirements defined for this project:
@@ -79,7 +81,7 @@ A second UUID is assigned to each marking store when it is created and store loc
 The combination of the marking store id and the subject id uniquely identify every marking in the store.
 
 When the swf workflow object executes a transition it will move the subject to a different place. The workflow uses the marking store's getMark and setMark methods for access to the marking for a subject. These accessor methods simply dispatch a number of events during get and set operations to interact with the actual persistence layer:
-* workflow.store.created notifies any persistence listeners that a new marking store was created.
+* workflow.store.created notifies any persistence listeners that a new marking store was created. Since there is a one-to-one relationship between a workflow and its marking store, this id is also a side-channel id to a single workflow.
 * workflow.places.get requests the marking for a store and subject.
 * workflow.places.setting notifies the persistence layer that a marking needs to be persisted.
 * workflow.places.set notifies the persistence layer that a marking was set and any required persistence cleanup (such as flushing) can be performed.
