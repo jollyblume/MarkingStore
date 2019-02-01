@@ -23,7 +23,7 @@ It is dependant on several 3rd party vendors:
 
 ## Petri Nets and Symfony Workflow and This Component
 ### A super quick overview
-Petri Nets have been used to descibe workflow systems since the 1950's. They have been studied deeply and proven to provide superior workflow analytics.
+Petri Nets have been used to descibe workflow systems since the 1960's. They have been studied deeply since and proven to provide superior workflow analytics.
 
 The Petri Net model defines a few standard interfaces used to descibe a workflow and track a token as it is processed by that workflow:
 * **Tokens** are the objects being tracked as it proceeds through a workflow. The symfony/workflow component uses the term *subject* in place of the traditional *token*. A symfony *subject* has minimal requirements to be considered valid workflow tokens. These requirements are discussed below. I am likely to use the terms *token* and *subject* interchangeably.  I will clean this language up during a future review cycle.
@@ -45,6 +45,15 @@ They also define general workflow domain specific terminology often used when de
 There are literally thousands of hours of documentation and research papers to be found on the internet. It is a fascinating subject.
 
 Of particular interest, once workflow fundamentals are understood, are several sites describing standard workflow design patterns. These workflow design patterns will provide a deeper understanding of the capabilities of workflow systems based on the Peri Net.
+
+### A word about workflows and state machines
+I've seen a lot of workflow systems try to implement a state machine as if it were a counterpart of the marking store. This concept will break the design of any workflow system, because the idea of state in a workflow is a myth.
+
+By definition and design, the state of a single transition rarely impacts the state of another transition.
+
+State machine mechanics don't belong anywhere in the workflow core. They are more closely related to a subject, where global state takes on relevance in the context of a subject or group of subjects places and inter-place relationships within the workflow.
+
+I intend to implement a state machine architecture for subjects down the road. There will be no mention of state machines found in this marking store.
 
 ### Why this component
 The symfony/workflow component is a framework for building workflow systems. It includes an elegant marking store interface, but only a minimal marking store implementation.
