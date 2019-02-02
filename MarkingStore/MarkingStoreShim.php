@@ -78,7 +78,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $markingStoreId = $this->getMarkingStoreId();
         $subjectId = $this->getSubjectId($subject);
         $transformer = new MarkingToPlacesTransformer();
-        $places = $transformer->tranform($marking);
+        $places = $transformer->transform($marking);
         $this->setPlaces($markingStoreId, $subjectId, $places);
     }
 
