@@ -1,78 +1,37 @@
-Multi-tenant Workflow Marking Store Component
-=============================================
+## jollyblume/workflow
+###### This component adds a light weight, multi-tenant Marking Store to symfony/workflow.
+This component is built on **symfony/workflow** and is a different implementation of symfony's *MarkingStoreInterface*
 
-## General library status
-The code base is stable and it's interfaces are not going to be changing. Unit tests are far from complete, many tests remain to be written. Existing tests provide a credible level of code quality for development use. I don't expect any bugs
-in the current code base. Of course, everyone knows how foolish that notion is until test units are complete...
+A simple key-value pair view of a marking is represented to persistence strategies.
 
-This README needs to be completed, as do code docblocks.
+    <marking-store-id>/<subject-id> = <array-of-places>
 
-I do not intend to release a 1.0 version until these todo's are complete.
+**PersistStrategyInterface** is the mediator implementation required for a marking store to interact with a persistence layer. Multiple strategies may be installed. If no strategies are installed, the marking store never persists anything and will return *[]* for any get.
 
-## Install via composer
-   composer.phar require jollyblume/workflow:@dev
+**InMemoryPersistStrategy** is included and can support diverse needs, but does not actually persist anything. Extending it to support a strategy that persists to a user's session would be useful, but any more complicated should be defined in a separate library.
 
-## Library overview
-This library implements a multi-tenant marking store meeting the requirements for a symfony/workflow marking store.
+**MarkingStoreShim** implements the **symfony/workflow** **MarkingStoreCollection** interface and is sometime refered to as the marking store in this README.
 
-It is dependant on a few 3rd party vendors:
-* symfony/workflow
-* symfony/property-access
-* symfony/event-dispatcher
+The *shim* is a mediator between a **symfony/workflow** workflow object and a workflow's marking store. It dispatches **WorkflowEvent** to active listeners of four events.
+* *workflow.store.created* is dispatched during construction of the marking store.
+* There is a one-to-one relationship between *workflow* and *marking-store* objects.
+* *workflow.places.get* is dispatched to get an array of places from the strategy for a *markingStorId* and *subjectId* pair.
+* *workflow.places.setting* is dispatched to set an array of places to the strategy for a *markingStorId* and *subjectId* pair.
+* *workflow.places.set* is dispatched after persistence is completed for any cleanup code to execute after a persistence step completes.
 
-## Petri Nets and Symfony Workflow and This Component
-### A super quick overview
-Petri Nets have been used to descibe workflow systems since the 1960's. They have been studied deeply since and proven to provide superior workflow analytics and monitoring, along with advanced workflow design patterns.
+The *array-of-places* concept for a marking is used consistently on the marking store side of this component. However, the *shim* converts between a **symfony/workflow** **Marking** and these arrays. Symfony-side code never sees an *array-of-places*.
 
-The Petri Net model defines a few standard interfaces used to descibe a workflow and track a token as it is processed by that workflow:
-* **Tokens** are the objects being tracked as it proceeds through a workflow. The symfony/workflow component uses the term *subject* in place of the traditional *token*. A symfony *subject* has minimal requirements to be considered valid workflow tokens. These requirements are discussed below. I am likely to use the terms *token* and *subject* interchangeably.  I will clean this language up during a future review cycle.
-* **Places** are stopping points for a token as it proceeds through a workflow. A token can only be processed by a given *transition* when it is resting some specific *place(s)*. A *token* must be located in at least one *place*, but may be in multiple *places*. The list of place(s), where a token is located, is known as the token's marking. How markings relate to each other is often the core of analytic and monitoring systems.
-* **Arcs** are connections between a *place(s)* and a *transition(s)*. The symfony/workflow component greatly simplifies the standard Perti Net model by merging Petri Net *arc* concepts into its *transition* architecture.
+###### *Still a lot of work to do*
+Current unit tests provide a reasonable code coverage and I don't expect any bugs. ;)
+I would love a bug report or pr when you find one. Bug reports will get quick attention.
 
-Petri Net implementations often have similar system-level components and classes that make-up the overall workflow architecture:
-* A **Workflow** is an *active* workflow, through which **tokens** are progressing. It is a live object or service used from user-land code to process a **token**. A single **workflow** object is used to process an unbounded number of **tokens** concurrently.
-* A **Definition** is a collection of **places** and **transitions**. **Definitions** are used to create a new **workflow**.
-* A **Registry** is a collection of **definitions** and often a workflow object builder.
-* A **Marking Store** is a database containing **token(s)** **marking(s)** for a **workflow**. This marking data is extremely important to any production workflow system. It is the focus for workflow analytic and monitoring systems and is is one of a Petri Net's most powerful feature.
+A few things need completing before a *final* release.
+* github bug tracking and other tools
+* this README
+* a few unit tests.
+* many code docblocks.
 
-This handful of model and systems classes make up the core of many Petri Net based automation and workflow systems. The symfony/workflow component is no different. Its modern take on the core system and clean interface make this component an ideal workflow framework.
+The component source is in its expected, final state. Other than the issues notes above, there are no changes scheduled for this library.
 
-They also define general workflow domain specific terminology often used when descibing workflow systems.
-
-There are literally thousands of hours of documentation and research papers to be found on the internet related to these subjects.
-
-Of particular interest are several sites describing standard workflow design patterns. These workflow design patterns will provide a deeper understanding of the capabilities of workflow systems based on the Peri Net concepts.
-
-### A word about workflows and state machines
-I've seen a lot of workflow systems try to implement a state machine as if it were a counterpart of the marking store. This concept will break the design of any workflow system, because the idea of state in a workflow is misunderstood.
-
-By definition and design, the state of a single transition rarely impacts the state of another transition. The state most commonly shared occurs during a **transition**, where state at one **place** causes some state in the next **place**. This feature is also largely responsible for a workflow to be (at least mathematically) reversible.
-
-State machine mechanics don't belong anywhere in the workflow core. They are more closely related to a subject, where global state takes on relevance in the context of a subject or group of subjects places and inter-place relationships within a workflow.
-
-I intend to implement a state machine architecture for subjects down the road. State Machines are an important workflow tool. But the conversations belong in some application view of the workflow. It is not a subject for this component, however.
-
-My initial conept for a state machine involves creating state controlling **workflow(s)**, where the **subject(s)** for this **workflow(s)** is an internal implementation detail. I expect this, or a similar solution, will allow a clean state machine implementation that is largely independant of any workflow or subject interface. It will also have the benefit of any analytics and management tools built for a workflow system as a whole.
-
-### Why this component
-The symfony/workflow component is a framework for building workflow systems. It includes an elegant marking store interface, but only a minimal marking store implementation.
-
-Its implementation stores a marking on a public property of a subject. It a solid and super-simple implementation. However, because the marking store is stored directly on a subject, it can not participate in multiple workflows concurrently. The decentralization of the **marking(s)** also hides important side-channel workflow metadata.
-
-This component is focused on tracking the **marking(s)** for an unbounded number of **workflows)** a **subject** is participating in, concurrently. In addition, it describes a simple marking store persistence architecture. This marking store enables important workflow definition and management features, such as recursive workflows.
-
-### Component goals and architecture
-General goals and requirements for this project include:
-* This component implements symfony/workflow::MarkingStoreInterface, the interface used **workflow(s)** to access **marking(s)**. The jbj/workflow::MarkingStoreShim implements a mediator pattern that manages this component edge.
-* This component implement a marking store capable of persisting **marking(s)** for **subject(s)**. This multi-tenant architecture is important for implementing important workflow definition strategies, such as *Recursive Workflow(s)** and status bubbling.
-* This component employs an event dispatcher for all accessor requirements between the jbj/workflow::MarkingStoreShim and any persistence layers that may have been defined. In fact, it completely oblivious to what persistence workflow may be occurring.
-* Persistence strategies must implement jbj/workflow::PersistStrategyInterface. This interface closely resembles symfony/workflow::MarkingStoreInterface, but allows for the additional metadata required for multi-tenancy.
-* Persistence strategies should be delivered indiviually within isolated libraries. Vendors used by one strategy will vary wildy from those of another. A persistence strategy only needs to implement jbj/workflow::PersistStrategyInterface as its entry point.
-* This component implements the same pattern for marking a subject as the symfony/workflow component. Where symfony/workflow marks subject with a property named *marking*, this component uses a property named *subjectId*. Ths should allow any code base using symfony's default marking store implementation to coexist with this component.
-* All ids (marking store id and subject id) should be UUID's.
-
-When **workflow** executes a transition it will move a subject to a different **place(s)**. The jbj/workflow::MarkingStoreShim uses the symfony/workflow::MarkingStoreInterface methods getMark($subject) and setMark($subject)  as expected and uses these methods to dispatch appropriate events:
-  * *workflow.store.created* notifies any listeners that a new marking store was created.The one-to-one relationship between a **workflow** and a **marking store** is important side-channel metadata.
-  * *workflow.places.get* requests the **marking** for a store and subject combination. Persistence layes appear to be simple key stores that combine the store and subject ids to create an aggregate key whose value is an array of places. The concept of an array of places doesn't become a **marking** until it crosses the Shim mediator.
-  * *workflow.places.setting* notifies the persistence layer that a marking needs to be persisted.
-  * workflow.places.set notifies the persistence layer that a persistence is complete and cleanup steps (such as flushing) can be performed.
+#### Install via composer
+composer.phar require jollyblume/workflow:@dev
