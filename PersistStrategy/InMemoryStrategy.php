@@ -25,7 +25,7 @@ class InMemoryStrategy implements PersistStrategyInterface
     {
         $index = sprintf('%s/%s', $markingStoreId, $subjectId);
         if (array_key_exists($index, $this->collection)) {
-            return $this->collection[$index];
+            return $this->collection[$index] ?: [];
         }
         return [];
     }
