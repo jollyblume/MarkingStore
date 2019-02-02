@@ -4,15 +4,15 @@ namespace JBJ\Workflow\EventListener;
 
 use Psr\Log\LoggerInterface;
 use JBJ\Workflow\Event\WorkflowEvent;
-use JBJ\Workflow\PersistStrategyInterface;
+use JBJ\Workflow\StorageStrategyInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class PersistListener implements EventSubscriberInterface
+class StorageListener implements EventSubscriberInterface
 {
     private $logger;
     private $strategy;
 
-    public function __construct(LoggerInterface $logger, PersistStrategyInterface $strategy = null)
+    public function __construct(LoggerInterface $logger, StorageStrategyInterface $strategy = null)
     {
         $this->logger = $logger;
         $this->strategy = $strategy;

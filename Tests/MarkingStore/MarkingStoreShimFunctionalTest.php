@@ -8,8 +8,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use JBJ\Workflow\Validator\UuidValidator;
 use JBJ\Workflow\MarkingStore\MarkingStoreShim;
-use JBJ\Workflow\EventListener\PersistListener;
-use JBJ\Workflow\PersistStrategy\InMemoryStrategy;
+use JBJ\Workflow\EventListener\StorageListener;
+use JBJ\Workflow\StorageStrategy\InMemoryStrategy;
 use PHPUnit\Framework\TestCase;
 
 class MarkingStoreShimFunctionalTest extends TestCase
@@ -37,7 +37,7 @@ class MarkingStoreShimFunctionalTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $strategy = new InMemoryStrategy($logger);
-        $listener = new PersistListener($logger, $strategy);
+        $listener = new StorageListener($logger, $strategy);
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber($listener);
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
@@ -51,7 +51,7 @@ class MarkingStoreShimFunctionalTest extends TestCase
     /**
      * @depends testGetMarkingReturnsEmptyArrayIfNotSet
      */
-    public function testSetMarkingPersists($markingStore)
+    public function testSetMarkingStorages($markingStore)
     {
         $subject = $this->createAcceptableSubject();
         $subject->setSubjectId('subject1');

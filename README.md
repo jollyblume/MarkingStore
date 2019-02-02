@@ -6,9 +6,9 @@ A simple key-value pair view of a marking is represented to persistence strategi
 
     <marking-store-id>/<subject-id> = <array-of-places>
 
-**PersistStrategyInterface** is the mediator implementation required for a marking store to interact with a persistence layer. Multiple strategies may be installed. If no strategies are installed, the marking store never persists anything and will return *[]* for any get.
+**StorageStrategyInterface** is the mediator implementation required for a marking store to interact with a persistence layer. Multiple strategies may be installed. If no strategies are installed, the marking store never persists anything and will return *[]* for any get.
 
-**InMemoryPersistStrategy** is included and can support diverse needs, but does not actually persist anything. Extending it to support a strategy that persists to a user's session would be useful, but any more complicated should be defined in a separate library.
+**InMemoryStorageStrategy** is included and can support diverse needs, but does not actually persist anything. Extending it to support a strategy that persists to a user's session would be useful, but any more complicated should be defined in a separate library.
 
 **MarkingStoreShim** implements the **symfony/workflow** **MarkingStoreCollection** interface and is sometime refered to as the marking store in this README.
 

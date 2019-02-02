@@ -1,12 +1,12 @@
 <?php
 
-namespace JBJ\Workflow\PersistStrategy;
+namespace JBJ\Workflow\StorageStrategy;
 
 use Psr\Log\LoggerInterface;
-use JBJ\Workflow\PersistStrategyInterface;
+use JBJ\Workflow\StorageStrategyInterface;
 use JBJ\Workflow\Document\InMemoryCollection;
 
-class InMemoryStrategy implements PersistStrategyInterface
+class InMemoryStrategy implements StorageStrategyInterface
 {
     private $logger;
     private $collection;

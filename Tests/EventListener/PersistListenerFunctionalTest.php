@@ -5,18 +5,18 @@ namespace JBJ\Workflow\Tests\EventListener;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use JBJ\Workflow\Event\WorkflowEvent;
-use JBJ\Workflow\EventListener\PersistListener;
-use JBJ\Workflow\PersistStrategy\InMemoryStrategy;
+use JBJ\Workflow\EventListener\StorageListener;
+use JBJ\Workflow\StorageStrategy\InMemoryStrategy;
 use PHPUnit\Framework\TestCase;
 
-class PersistListenerFunctionalTest extends TestCase
+class StorageListenerFunctionalTest extends TestCase
 {
     public function testGetDispatcher()
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
         $strategy = new InMemoryStrategy($logger);
-        $subscriber = new PersistListener($logger, $strategy);
+        $subscriber = new StorageListener($logger, $strategy);
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber($subscriber);
         $listeners = $dispatcher->getListeners();
@@ -56,7 +56,7 @@ class PersistListenerFunctionalTest extends TestCase
     /**
      * @depends testGetDispatcher
      */
-    public function testOnSetPersistsPlaces($dispatcher)
+    public function testOnSetStoragesPlaces($dispatcher)
     {
         $expectedPlaces =[
             'place1',

@@ -1,9 +1,9 @@
 <?php
 
-namespace JBJ\Workflow\Tests\PersistStrategy;
+namespace JBJ\Workflow\Tests\StorageStrategy;
 
 use Psr\Log\LoggerInterface;
-use JBJ\Workflow\PersistStrategy\InMemoryStrategy;
+use JBJ\Workflow\StorageStrategy\InMemoryStrategy;
 use PHPUnit\Framework\TestCase;
 
 class InMemoryStrategyTest extends TestCase
@@ -20,7 +20,7 @@ class InMemoryStrategyTest extends TestCase
     /**
      * @depends testGetPlacesReturnEmptyArrayForMissingMarking
      */
-    public function testSetPlacesPersists($strategy)
+    public function testSetPlacesStorages($strategy)
     {
         $strategy->setPlaces('store1', 'subject1', ['place1', 'place2']);
         $places = $strategy->getPlaces('store1', 'subject1');
@@ -29,9 +29,9 @@ class InMemoryStrategyTest extends TestCase
     }
 
     /**
-     * @depends testSetPlacesPersists
+     * @depends testSetPlacesStorages
      */
-    public function testSetPlacesPersistEmptyPlacesStillGetsDefault($strategy)
+    public function testSetPlacesStorageEmptyPlacesStillGetsDefault($strategy)
     {
         $strategy->setPlaces('store1', 'subject1', []);
         $places = $strategy->getPlaces('store1', 'subject1');
