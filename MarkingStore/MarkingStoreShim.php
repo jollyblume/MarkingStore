@@ -10,6 +10,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Ramsey\Uuid\Uuid;
 use JBJ\Workflow\Event\WorkflowEvent;
 use JBJ\Workflow\MarkingStoreInterface;
+use JBJ\Workflow\Transformer\MarkingToPlacesTransformer;
 
 class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 {
@@ -18,7 +19,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
     private $propertyAccessor;
     private $dispatcher;
 
-    public function __construct(EventDispatcherInterface $dispatcher, string $property = 'subjectId', PropertyAccessorInterface $propertyAccessor = null )
+    public function __construct(EventDispatcherInterface $dispatcher, PropertyAccessorInterface $propertyAccessor = null, string $property = 'subjectId')
     {
         $this->dispatcher = $dispatcher;
         $this->property = $property;
@@ -66,7 +67,8 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $markingStoreId = $this->getMarkingStoreId();
         $subjectId = $this->getSubjectId($subject);
         $places = $this->getPlaces($markingStoreId, $subjectId);
-        $marking = new Marking($places);
+        $transformer = new MarkingToPlacesTransformer();
+        $marking = $transformer->reverseTransform($places);
         return $marking;
     }
 
@@ -75,7 +77,9 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $this->assertValidSubject($subject);
         $markingStoreId = $this->getMarkingStoreId();
         $subjectId = $this->getSubjectId($subject);
-        $this->setPlaces($markingStoreId, $subjectId, array_keys($marking->getPlaces()));
+        $transformer = new MarkingToPlacesTransformer();
+        $places = $transformer->tranform($marking);
+        $this->setPlaces($markingStoreId, $subjectId, $places);
     }
 
     protected function getPlaces(string $markingStoreId, string $subjectId)
