@@ -19,9 +19,6 @@ It is dependant on a few 3rd party vendors:
 * symfony/workflow
 * symfony/property-access
 * symfony/event-dispatcher
-* jollyblume/common
-
-jollyblume/common is only included to support the InMemoryPeristStrategy and can be considered an implementation detail. This strategy is only included to provide compatibility with swf's InMemoryMarkingStore, symfony's default marking store implementation. Persistence strategies should be developed in isolated libraries. The InMemoryPersistStrategy dilutes the focus of this component, but provides a good reference implementation.
 
 ## Petri Nets and Symfony Workflow and This Component
 ### A super quick overview
