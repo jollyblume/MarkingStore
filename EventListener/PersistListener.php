@@ -4,6 +4,7 @@ namespace JBJ\Workflow\EventListener;
 
 use Psr\Log\LoggerInterface;
 use JBJ\Workflow\Event\WorkflowEvent;
+use JBJ\Workflow\PersistStrategyInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PersistListener implements EventSubscriberInterface
@@ -29,7 +30,8 @@ class PersistListener implements EventSubscriberInterface
     {
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
-        $this->strategy->getPlaces($markingStoreId, $subjectId);
+        $places = $this->strategy->getPlaces($markingStoreId, $subjectId);
+        $event->setPlaces($places);
     }
 
     public function onSetting(WorkflowEvent $event)

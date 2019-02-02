@@ -11,10 +11,10 @@ class InMemoryStrategy implements PersistStrategyInterface
     private $logger;
     private $collection;
 
-    public function __construct(LoggerInterface $logger, ArrayCollectionInterface $collection)
+    public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
-        $this->collection = $collection;
+        $this->collection = [];
         $this->logger->info('InMemoryStrategy created');
     }
 
@@ -24,16 +24,21 @@ class InMemoryStrategy implements PersistStrategyInterface
     public function getPlaces(string $markingStoreId, string $subjectId)
     {
         $index = sprintf('%s/%s', $markingStoreId, $subjectId);
-        $collection = $this->collection;
-        $places = $collection[$index] ?: [];
-        return $places;
+        if (array_key_exists($index, $this->collection)) {
+            return $this->collection[$index];
+        }
+        return [];
     }
 
     public function setPlaces(string $markingStoreId, string $subjectId, array $places)
     {
         $index = sprintf('%s/%s', $markingStoreId, $subjectId);
-        $collection = $this->collection;
-        $collection[$index] = $places;
+        if (empty($places)) {
+            unset($this->collection[$index]);
+        }
+        if (!empty($places)) {
+            $this->collection[$index] = $places;
+        }
     }
 
     public function cleanup()

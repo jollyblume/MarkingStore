@@ -4,7 +4,7 @@ namespace JBJ\Workflow\Tests\MarkingStore;
 
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use JBJ\Common\Validator\UuidValidator;
+use JBJ\Workflow\Validator\UuidValidator;
 use JBJ\Workflow\MarkingStore\MarkingStoreShim;
 use PHPUnit\Framework\TestCase;
 
@@ -112,7 +112,7 @@ class MarkingStoreShimTest extends TestCase
     }
 
     /**
-     * @expectedException \JBJ\Common\Exception\FixMeException
+     * @expectedException \JBJ\Workflow\Exception\FixMeException
      */
     public function testGetMarkingThrowsIfSubjectNotReadable()
     {
@@ -122,7 +122,7 @@ class MarkingStoreShimTest extends TestCase
     }
 
     /**
-     * @expectedException \JBJ\Common\Exception\FixMeException
+     * @expectedException \JBJ\Workflow\Exception\FixMeException
      */
     public function testGetMarkingThrowsIfSubjectNotWritable()
     {
