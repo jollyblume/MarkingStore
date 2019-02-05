@@ -11,6 +11,7 @@ use Ramsey\Uuid\Uuid;
 use JBJ\Workflow\Event\WorkflowEvent;
 use JBJ\Workflow\MarkingStoreInterface;
 use JBJ\Workflow\Transformer\MarkingToPlacesTransformer;
+use JBJ\Workflow\Validator\UuidValidator;
 
 class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 {
@@ -104,6 +105,10 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
     {
         if (empty($name)) {
             return strval(Uuid::uuid4());
+        }
+        $validator = new UuidValidator();
+        if ($validator->validate($name)) {
+            return $name;
         }
         return strval(Uuid::uuid3(Uuid::NAMESPACE_DNS, $name));
     }
