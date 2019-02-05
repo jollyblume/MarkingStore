@@ -63,6 +63,12 @@ class MarkingStoreShimTest extends TestCase
         return $dispatcher;
     }
 
+    /** @expectedException \JBJ\Workflow\Exception\FixMeException */
+    public function testPropertyIsMarking()
+    {
+        $store = new MarkingStoreShim($this->getDispatcher(), null, 'marking');
+    }
+
     public function testGetMarkingStoreId()
     {
         $validator = new UuidValidator();

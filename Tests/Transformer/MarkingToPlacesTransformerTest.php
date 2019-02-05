@@ -36,4 +36,11 @@ class MarkingToPlacesTransformerTest extends TestCase
         $marking = $transformer->reverseTransform($expectedPlaces);
         $this->assertEquals($expectedPlaces, array_keys($marking->getPlaces()));
     }
+
+    public function testTransformWhenNull()
+    {
+        $transformer = new MarkingToPlacesTransformer();
+        $marking = $transformer->transform(null);
+        $this->assertEquals([], $marking);
+    }
 }
