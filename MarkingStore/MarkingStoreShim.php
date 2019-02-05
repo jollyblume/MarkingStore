@@ -7,14 +7,15 @@ use Symfony\Component\Workflow\Marking;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Ramsey\Uuid\Uuid;
 use JBJ\Workflow\Event\WorkflowEvent;
 use JBJ\Workflow\MarkingStoreInterface;
 use JBJ\Workflow\Transformer\MarkingToPlacesTransformer;
-use JBJ\Workflow\Validator\UuidValidator;
+use JBJ\Workflow\Traits\CreateIdTrait;
 
 class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 {
+    use CreateIdTrait;
+
     private $markingStoreId;
     private $property;
     private $propertyAccessor;
@@ -99,17 +100,5 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $dispatcher = $this->dispatcher;
         $dispatcher->dispatch('workflow.places.setting', $event);
         $dispatcher->dispatch('workflow.places.set', $event);
-    }
-
-    protected function createId(string $name = '')
-    {
-        if (empty($name)) {
-            return strval(Uuid::uuid4());
-        }
-        $validator = new UuidValidator();
-        if ($validator->validate($name)) {
-            return $name;
-        }
-        return strval(Uuid::uuid3(Uuid::NAMESPACE_DNS, $name));
     }
 }
