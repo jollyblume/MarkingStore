@@ -12,15 +12,17 @@ class Workflow extends BaseWorkflow
 {
     use CreateIdTrait;
 
-    public function __construct(Definition $definition, MarkingStoreInterface $markingStore = null, EventDispatcherInterface $dispatcher = null, PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(Definition $definition EventDispatcherInterface $dispatcher = null, PropertyAccessorInterface $propertyAccessor = null)
     {
         $propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
         $metadata = $definition->getMetadataStore()->getWorkflowMetadata()
         if (array_key_exists('name', $metadata)) {
             $name = $metadata['name'];
         }
+        //todo exception if no name in metadata. definition, workflow and marking
+        //     store name must remain synced.
         $name = $this->createId($name); // ensure $name is a uuid
-        $markingStore = $markingStore ?: new MarkingStoreShim($dispatcher, $propertyAccessor, 'subjectId', $name);
+        $markingStore = new MarkingStoreShim($dispatcher, $propertyAccessor, 'subjectId', $name);
         parent::__construct($definition, $markingStore, $dispatcher, $name);
     }
 }
