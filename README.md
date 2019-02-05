@@ -2,11 +2,11 @@
 ###### This component adds a light weight, multi-tenant Marking Store to symfony/workflow.
 This component is built on **symfony/workflow** and is a different implementation of symfony's *MarkingStoreInterface*
 
-A simple key-value pair view of a marking is represented to persistence strategies.
+A simple key-value pair view of a marking can represented by storage strategies. The built-in InMemoryStorageStrategy is an example:
 
     <marking-store-id>/<subject-id> = <array-of-places>
 
-**StorageStrategyInterface** is the mediator implementation required for a marking store to interact with a persistence layer. Multiple strategies may be installed. If no strategies are installed, the marking store never persists anything and will return *[]* for any get.
+**StorageStrategyInterface** is the mediator implementation required for a marking store to interact with a storage layer. Multiple strategies may be installed. If no strategies are installed, the marking store never persists anything and will return *[]* for any get.
 
 **InMemoryStorageStrategy** is included and can support diverse needs, but does not actually persist anything. Extending it to support a strategy that persists to a user's session would be useful, but any more complicated should be defined in a separate library.
 
@@ -17,7 +17,7 @@ The *shim* is a mediator between a **symfony/workflow** workflow object and a wo
 * There is a one-to-one relationship between *workflow* and *marking-store* objects.
 * *workflow.places.get* is dispatched to get an array of places from the strategy for a *markingStorId* and *subjectId* pair.
 * *workflow.places.setting* is dispatched to set an array of places to the strategy for a *markingStorId* and *subjectId* pair.
-* *workflow.places.set* is dispatched after persistence is completed for any cleanup code to execute after a persistence step completes.
+* *workflow.places.set* is dispatched after storage is completed for any cleanup code to execute after a storage step completes.
 
 The *array-of-places* concept for a marking is used consistently on the marking store side of this component. However, the *shim* converts between a **symfony/workflow** **Marking** and these arrays. Symfony-side code never sees an *array-of-places*.
 
