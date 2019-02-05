@@ -19,7 +19,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
     private $propertyAccessor;
     private $dispatcher;
 
-    public function __construct(EventDispatcherInterface $dispatcher, PropertyAccessorInterface $propertyAccessor = null, string $property = 'subjectId')
+    public function __construct(EventDispatcherInterface $dispatcher, PropertyAccessorInterface $propertyAccessor = null, string $property = 'subjectId', string $name = '')
     {
         $this->dispatcher = $dispatcher;
         $this->property = $property;
@@ -27,7 +27,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
             throw new JBJ\Workflow\Exception\FixMeException('property named "marking" is reserved for symfony/workflow');
         }
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
-        $this->markingStoreId = $this->createId();
+        $this->markingStoreId = $this->createId($name);
         $event = new WorkflowEvent($this->markingStoreId);
         $dispatcher->dispatch('workflow.store.created', $event);
     }
@@ -100,8 +100,11 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $dispatcher->dispatch('workflow.places.set', $event);
     }
 
-    protected function createId()
+    protected function createId(string $name = '')
     {
-        return strval(Uuid::uuid4());
+        if (empty($name)) {
+            return strval(Uuid::uuid4());
+        }
+        return strval(Uuid::uuid3(Uuid::NAMESPACE_DNS, $name));
     }
 }
