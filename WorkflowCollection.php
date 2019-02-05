@@ -10,7 +10,7 @@ use Ramsey\Uuid\Uuid;
 
 class WorkflowCollection implements ArrayCollectionInterface
 {
-    use GraphCollectionTrait, GraphCollectionTrait { getName as public; getParent as public; setParent as public; }
+    use CreateIdTrait, GraphCollectionTrait;
 
     public function __construct(array $elements = [], PropertyAccessorInterface $propertyAccessor = null, string $name = '')
     {
