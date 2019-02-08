@@ -1,12 +1,12 @@
 <?php
 
-namespace JBJ\Workflow\Tests\EventListener;
+namespace JBJ\Workflow\MarkingStore\Tests\EventListener;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use JBJ\Workflow\Event\WorkflowEvent;
-use JBJ\Workflow\EventListener\StorageListener;
-use JBJ\Workflow\StorageStrategy\InMemoryStrategy;
+use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
+use JBJ\Workflow\MarkingStore\EventListener\StorageListener;
+use JBJ\Workflow\MarkingStore\StorageStrategy\InMemoryStrategy;
 use PHPUnit\Framework\TestCase;
 
 class StorageListenerFunctionalTest extends TestCase

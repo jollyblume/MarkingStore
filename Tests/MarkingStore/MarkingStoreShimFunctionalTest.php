@@ -1,15 +1,15 @@
 <?php
 
-namespace JBJ\Workflow\Tests\MarkingStore;
+namespace JBJ\Workflow\MarkingStore\Tests\MarkingStore;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use JBJ\Workflow\Validator\UuidValidator;
-use JBJ\Workflow\MarkingStore\MarkingStoreShim;
-use JBJ\Workflow\EventListener\StorageListener;
-use JBJ\Workflow\StorageStrategy\InMemoryStrategy;
+use JBJ\Workflow\MarkingStore\Validator\UuidValidator;
+use JBJ\Workflow\MarkingStore\MarkingStore\MarkingStoreShim;
+use JBJ\Workflow\MarkingStore\EventListener\StorageListener;
+use JBJ\Workflow\MarkingStore\StorageStrategy\InMemoryStrategy;
 use PHPUnit\Framework\TestCase;
 
 class MarkingStoreShimFunctionalTest extends TestCase

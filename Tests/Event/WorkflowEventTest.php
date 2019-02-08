@@ -1,8 +1,8 @@
 <?php
 
-namespace JBJ\Workflow\Tests\Event;
+namespace JBJ\Workflow\MarkingStore\Tests\Event;
 
-use JBJ\Workflow\Event\WorkflowEvent;
+use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
 use PHPUnit\Framework\TestCase;
 
 class WorkflowEventTest extends TestCase

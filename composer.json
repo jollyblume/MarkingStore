@@ -1,5 +1,5 @@
 {
-    "name": "jollyblume/workflow",
+    "name": "jollyblume/marking-store",
     "description": "symfony/workflow compliant multi-tenant marking store",
     "type": "library",
     "license": "MIT",
@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^7.1.3",
-        "jollyblume/common": "@dev",
+        "jollyblume/composed-collections": "@dev",
         "moontoast/math": "^1.1",
         "ramsey/uuid": "^3.8",
         "symfony/event-dispatcher": "^4.2",
@@ -30,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "JBJ\\Workflow\\": ""
+            "JBJ\\Workflow\\MarkingStore\\": ""
         }
     }
 }

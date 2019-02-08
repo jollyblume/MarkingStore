@@ -1,10 +1,10 @@
 <?php
 
-namespace JBJ\Workflow\EventListener;
+namespace JBJ\Workflow\MarkingStore\EventListener;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use JBJ\Workflow\Event\WorkflowEvent;
+use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
 
 class AuditListener implements EventSubscriberInterface
 {

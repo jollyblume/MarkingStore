@@ -1,10 +1,10 @@
 <?php
 
-namespace JBJ\Workflow\StorageStrategy;
+namespace JBJ\Workflow\MarkingStore\StorageStrategy;
 
 use Psr\Log\LoggerInterface;
-use JBJ\Workflow\StorageStrategyInterface;
-use JBJ\Workflow\Document\InMemoryCollection;
+use JBJ\Workflow\MarkingStore\StorageStrategyInterface;
+use JBJ\Workflow\MarkingStore\Document\InMemoryCollection;
 
 class InMemoryStrategy implements StorageStrategyInterface
 {

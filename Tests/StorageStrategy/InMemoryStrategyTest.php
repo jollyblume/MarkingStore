@@ -1,9 +1,9 @@
 <?php
 
-namespace JBJ\Workflow\Tests\StorageStrategy;
+namespace JBJ\Workflow\MarkingStore\Tests\StorageStrategy;
 
 use Psr\Log\LoggerInterface;
-use JBJ\Workflow\StorageStrategy\InMemoryStrategy;
+use JBJ\Workflow\MarkingStore\StorageStrategy\InMemoryStrategy;
 use PHPUnit\Framework\TestCase;
 
 class InMemoryStrategyTest extends TestCase

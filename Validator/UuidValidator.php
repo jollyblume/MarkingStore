@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\Validator;
+namespace JBJ\Workflow\MarkingStore\Validator;
 
 /**
  * This file is part of the ramsey/uuid library

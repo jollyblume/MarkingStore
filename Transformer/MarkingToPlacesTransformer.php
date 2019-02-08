@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\Transformer;
+namespace JBJ\Workflow\MarkingStore\Transformer;
 
 use Symfony\Component\Workflow\Marking;
 

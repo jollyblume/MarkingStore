@@ -1,16 +1,16 @@
 <?php
 
-namespace JBJ\Workflow\MarkingStore;
+namespace JBJ\Workflow\MarkingStore\MarkingStore;
 
 use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface as BaseStoreInterface;
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use JBJ\Workflow\Event\WorkflowEvent;
-use JBJ\Workflow\MarkingStoreInterface;
-use JBJ\Workflow\Transformer\MarkingToPlacesTransformer;
-use JBJ\Workflow\Traits\CreateIdTrait;
+use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
+use JBJ\Workflow\MarkingStore\MarkingStoreInterface;
+use JBJ\Workflow\MarkingStore\Transformer\MarkingToPlacesTransformer;
+use JBJ\Workflow\MarkingStore\Traits\CreateIdTrait;
 
 class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 {
@@ -26,7 +26,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $this->dispatcher = $dispatcher;
         $this->property = $property;
         if ('marking' === $property) {
-            throw new \JBJ\Workflow\Exception\FixMeException('property named "marking" is reserved for symfony/workflow');
+            throw new \JBJ\Workflow\MarkingStore\Exception\FixMeException('property named "marking" is reserved for symfony/workflow');
         }
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
         $this->markingStoreId = $this->createId($name);
@@ -46,7 +46,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $isReadable = $propertyAccessor->isReadable($subject, $property);
         $isWritable = $propertyAccessor->isWritable($subject, $property);
         if (!$isReadable || !$isWritable) {
-            throw new \JBJ\Workflow\Exception\FixMeException("SubjectId not readable or writable.");
+            throw new \JBJ\Workflow\MarkingStore\Exception\FixMeException("SubjectId not readable or writable.");
         }
     }
 

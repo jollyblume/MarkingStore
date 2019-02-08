@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\Event;
+namespace JBJ\Workflow\MarkingStore\Event;
 
 use Symfony\Component\EventDispatcher\Event as BaseEvent;
 

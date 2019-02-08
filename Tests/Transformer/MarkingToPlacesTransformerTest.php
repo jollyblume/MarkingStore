@@ -1,9 +1,9 @@
 <?php
 
-namespace JBJ\Workflow\Tests\Transformer;
+namespace JBJ\Workflow\MarkingStore\Tests\Transformer;
 
 use Symfony\Component\Workflow\Marking;
-use JBJ\Workflow\Transformer\MarkingToPlacesTransformer;
+use JBJ\Workflow\MarkingStore\Transformer\MarkingToPlacesTransformer;
 use PHPUnit\Framework\TestCase;
 
 class MarkingToPlacesTransformerTest extends TestCase

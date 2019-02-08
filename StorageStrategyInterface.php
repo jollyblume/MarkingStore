@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow;
+namespace JBJ\Workflow\MarkingStore;
 
 interface StorageStrategyInterface
 {

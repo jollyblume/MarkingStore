@@ -1,10 +1,10 @@
 <?php
 
-namespace JBJ\Workflow\EventListener;
+namespace JBJ\Workflow\MarkingStore\EventListener;
 
 use Psr\Log\LoggerInterface;
-use JBJ\Workflow\Event\WorkflowEvent;
-use JBJ\Workflow\StorageStrategyInterface;
+use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
+use JBJ\Workflow\MarkingStore\StorageStrategyInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StorageListener implements EventSubscriberInterface
