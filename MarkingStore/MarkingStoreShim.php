@@ -95,7 +95,6 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 
     protected function setPlaces(string $markingStoreId, string $subjectId, array $places)
     {
-
         $event = new WorkflowEvent($markingStoreId, $subjectId, $places);
         $dispatcher = $this->dispatcher;
         $dispatcher->dispatch('workflow.places.setting', $event);

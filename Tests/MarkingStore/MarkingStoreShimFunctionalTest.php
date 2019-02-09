@@ -16,8 +16,7 @@ class MarkingStoreShimFunctionalTest extends TestCase
 {
     protected function createAcceptableSubject()
     {
-        $subject = new class()
-        {
+        $subject = new class() {
             private $subjectId;
             public function getSubjectId()
             {

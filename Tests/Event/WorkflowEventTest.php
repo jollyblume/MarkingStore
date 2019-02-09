@@ -7,19 +7,22 @@ use PHPUnit\Framework\TestCase;
 
 class WorkflowEventTest extends TestCase
 {
-    public function testGetMarkingStoreId() {
+    public function testGetMarkingStoreId()
+    {
         $event = new WorkflowEvent('test.marking-store-id');
         $markingStoreId = $event->getMarkingStoreId();
         $this->assertEquals('test.marking-store-id', $markingStoreId);
     }
 
-    public function testGetSubjectId() {
+    public function testGetSubjectId()
+    {
         $event = new WorkflowEvent('test.marking-store-id', 'test.subject-id');
         $subjectId = $event->getSubjectId();
         $this->assertEquals('test.subject-id', $subjectId);
     }
 
-    public function testGetPlaces() {
+    public function testGetPlaces()
+    {
         $expectedPlaces = [
             'this.place',
             'that.place',

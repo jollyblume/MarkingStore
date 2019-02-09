@@ -26,7 +26,7 @@ class InMemoryStrategy implements StorageStrategyInterface
 
     protected function setDefaultIndexTransformer()
     {
-        $transformer = function(string $markingStoreId, string $subjectId) {
+        $transformer = function (string $markingStoreId, string $subjectId) {
             $index = sprintf('%s/%s', $markingStoreId, $subjectId);
             return $index;
         };

@@ -35,4 +35,5 @@ class MarkingToPlacesTransformer
         }
         $marking = new Marking($transformedPlaces);
         return $marking;
-    }}
+    }
+}

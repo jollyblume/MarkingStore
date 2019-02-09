@@ -12,8 +12,7 @@ class MarkingStoreShimTest extends TestCase
 {
     protected function createAcceptableSubject()
     {
-        $subject = new class()
-        {
+        $subject = new class() {
             private $subjectId;
             public function getSubjectId()
             {
@@ -29,8 +28,7 @@ class MarkingStoreShimTest extends TestCase
 
     protected function createUnreadableSubject()
     {
-        $subject = new class()
-        {
+        $subject = new class() {
             private $subjectId;
             public function setSubjectId($subjectId)
             {
@@ -42,8 +40,7 @@ class MarkingStoreShimTest extends TestCase
 
     protected function createUnwritableSubject()
     {
-        $subject = new class()
-        {
+        $subject = new class() {
             private $subjectId;
             public function getSubjectId()
             {
@@ -54,7 +51,8 @@ class MarkingStoreShimTest extends TestCase
     }
 
     private $dispatcher;
-    protected function getDispatcher() {
+    protected function getDispatcher()
+    {
         $dispatcher = $this->dispatcher;
         if (null === $dispatcher) {
             $dispatcher = new EventDispatcher();
