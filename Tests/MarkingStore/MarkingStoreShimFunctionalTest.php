@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use JBJ\Workflow\MarkingStore\Validator\UuidValidator;
+use JBJ\ComposedCollections\Validator\UuidValidator;
 use JBJ\Workflow\MarkingStore\MarkingStore\MarkingStoreShim;
 use JBJ\Workflow\MarkingStore\EventListener\StorageListener;
 use JBJ\Workflow\MarkingStore\StorageStrategy\InMemoryStrategy;

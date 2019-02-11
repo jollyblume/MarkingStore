@@ -10,11 +10,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
 use JBJ\Workflow\MarkingStore\MarkingStoreInterface;
 use JBJ\Workflow\MarkingStore\Transformer\MarkingToPlacesTransformer;
-use JBJ\Workflow\MarkingStore\Traits\CreateIdTrait;
+use JBJ\ComposedCollections\Traits\ElementNameTrait;
 
 class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 {
-    use CreateIdTrait;
+    use ElementNameTrait;
 
     private $markingStoreId;
     private $property;

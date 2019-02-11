@@ -4,7 +4,7 @@ namespace JBJ\Workflow\MarkingStore\Tests\MarkingStore;
 
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use JBJ\Workflow\MarkingStore\Validator\UuidValidator;
+use JBJ\ComposedCollections\Validator\UuidValidator;
 use JBJ\Workflow\MarkingStore\MarkingStore\MarkingStoreShim;
 use PHPUnit\Framework\TestCase;
 
