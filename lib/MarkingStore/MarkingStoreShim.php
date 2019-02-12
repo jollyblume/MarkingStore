@@ -26,7 +26,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $this->dispatcher = $dispatcher;
         $this->property = $property;
         if ('marking' === $property) {
-            throw new \JBJ\Workflow\MarkingStore\Exception\FixMeException('property named "marking" is reserved for symfony/workflow');
+            throw new \JBJ\Workflow\Exception\FixMeException('property named "marking" is reserved for symfony/workflow');
         }
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
         //todo send event to audit this name change
@@ -48,7 +48,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         $isReadable = $propertyAccessor->isReadable($subject, $property);
         $isWritable = $propertyAccessor->isWritable($subject, $property);
         if (!$isReadable || !$isWritable) {
-            throw new \JBJ\Workflow\MarkingStore\Exception\FixMeException("SubjectId not readable or writable.");
+            throw new \JBJ\Workflow\Exception\FixMeException("SubjectId not readable or writable.");
         }
     }
 

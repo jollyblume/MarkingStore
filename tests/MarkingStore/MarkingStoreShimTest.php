@@ -61,7 +61,7 @@ class MarkingStoreShimTest extends TestCase
         return $dispatcher;
     }
 
-    /** @expectedException \JBJ\Workflow\MarkingStore\Exception\FixMeException */
+    /** @expectedException \JBJ\Workflow\Exception\FixMeException */
     public function testPropertyIsMarking()
     {
         $store = new MarkingStoreShim($this->getDispatcher(), null, 'marking');
@@ -116,7 +116,7 @@ class MarkingStoreShimTest extends TestCase
     }
 
     /**
-     * @expectedException \JBJ\Workflow\MarkingStore\Exception\FixMeException
+     * @expectedException \JBJ\Workflow\Exception\FixMeException
      */
     public function testGetMarkingThrowsIfSubjectNotReadable()
     {
@@ -126,7 +126,7 @@ class MarkingStoreShimTest extends TestCase
     }
 
     /**
-     * @expectedException \JBJ\Workflow\MarkingStore\Exception\FixMeException
+     * @expectedException \JBJ\Workflow\Exception\FixMeException
      */
     public function testGetMarkingThrowsIfSubjectNotWritable()
     {
