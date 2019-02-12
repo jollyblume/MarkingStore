@@ -2,9 +2,9 @@
 
 namespace JBJ\Workflow\MarkingStore\Event;
 
-use Symfony\Component\EventDispatcher\Event as BaseEvent;
+use JBJ\Workflow\Event\WorkflowEvent;
 
-class WorkflowEvent extends BaseEvent
+class MarkingStoreEvent extends WorkflowEvent
 {
     private $markingStoreId;
     private $subjectId;

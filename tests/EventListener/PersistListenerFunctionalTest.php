@@ -4,7 +4,7 @@ namespace JBJ\Workflow\MarkingStore\Tests\EventListener;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
+use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
 use JBJ\Workflow\MarkingStore\EventListener\StorageListener;
 use JBJ\Workflow\MarkingStore\StorageStrategy\InMemoryStrategy;
 use PHPUnit\Framework\TestCase;
@@ -48,7 +48,7 @@ class StorageListenerFunctionalTest extends TestCase
      */
     public function testOnGetReturnsEmptyArrayIfKeyMissing($dispatcher)
     {
-        $event = new WorkflowEvent('store1', 'subject1');
+        $event = new MarkingStoreEvent('store1', 'subject1');
         $dispatcher->dispatch('workflow.places.get', $event);
         $places = $event->getPlaces();
         $this->assertEquals([], $places);
@@ -63,7 +63,7 @@ class StorageListenerFunctionalTest extends TestCase
             'place2',
             'place3',
         ];
-        $event = new WorkflowEvent('store1', 'subject1', $expectedPlaces);
+        $event = new MarkingStoreEvent('store1', 'subject1', $expectedPlaces);
         $dispatcher->dispatch('workflow.places.setting', $event);
         $event->setPlaces([]);
         $dispatcher->dispatch('workflow.places.get', $event);

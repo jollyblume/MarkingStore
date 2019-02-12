@@ -7,7 +7,7 @@ use Symfony\Component\Workflow\Marking;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
+use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
 use JBJ\Workflow\MarkingStore\MarkingStoreInterface;
 use JBJ\Workflow\MarkingStore\Transformer\MarkingToPlacesTransformer;
 use JBJ\ComposedCollections\Traits\ElementNameTrait;
@@ -32,7 +32,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         //todo send event to audit this name change
         //todo does this name change belong here?
         $this->setName($this->createId($name));
-        $event = new WorkflowEvent($this->getName());
+        $event = new MarkingStoreEvent($this->getName());
         $dispatcher->dispatch('workflow.store.created', $event);
     }
 
@@ -88,7 +88,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 
     protected function getPlaces(string $markingStoreId, string $subjectId)
     {
-        $event = new WorkflowEvent($markingStoreId, $subjectId);
+        $event = new MarkingStoreEvent($markingStoreId, $subjectId);
         $dispatcher = $this->dispatcher;
         $dispatcher->dispatch('workflow.places.get', $event);
         $places = $event->getPlaces();
@@ -97,7 +97,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 
     protected function setPlaces(string $markingStoreId, string $subjectId, array $places)
     {
-        $event = new WorkflowEvent($markingStoreId, $subjectId, $places);
+        $event = new MarkingStoreEvent($markingStoreId, $subjectId, $places);
         $dispatcher = $this->dispatcher;
         $dispatcher->dispatch('workflow.places.setting', $event);
         $dispatcher->dispatch('workflow.places.set', $event);

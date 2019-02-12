@@ -3,7 +3,7 @@
 namespace JBJ\Workflow\MarkingStore\EventListener;
 
 use Psr\Log\LoggerInterface;
-use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
+use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
 use JBJ\Workflow\MarkingStore\StorageStrategyInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -18,7 +18,7 @@ class StorageListener implements EventSubscriberInterface
         $this->strategy = $strategy;
     }
 
-    public function onStoreCreated(WorkflowEvent $event)
+    public function onStoreCreated(MarkingStoreEvent $event)
     {
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
@@ -26,7 +26,7 @@ class StorageListener implements EventSubscriberInterface
         $this->strategy->storeCreated($markingStoreId, $subjectId, $places);
     }
 
-    public function onGet(WorkflowEvent $event)
+    public function onGet(MarkingStoreEvent $event)
     {
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
@@ -34,7 +34,7 @@ class StorageListener implements EventSubscriberInterface
         $event->setPlaces($places);
     }
 
-    public function onSetting(WorkflowEvent $event)
+    public function onSetting(MarkingStoreEvent $event)
     {
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
@@ -42,7 +42,7 @@ class StorageListener implements EventSubscriberInterface
         $this->strategy->setPlaces($markingStoreId, $subjectId, $places);
     }
 
-    public function onSet(WorkflowEvent $event)
+    public function onSet(MarkingStoreEvent $event)
     {
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();

@@ -4,7 +4,7 @@ namespace JBJ\Workflow\MarkingStore\EventListener;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
+use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
 
 class AuditListener implements EventSubscriberInterface
 {
@@ -15,7 +15,7 @@ class AuditListener implements EventSubscriberInterface
         $this->logger = $logger;
     }
 
-    public function onStoreCreated(WorkflowEvent $event)
+    public function onStoreCreated(MarkingStoreEvent $event)
     {
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
@@ -23,14 +23,14 @@ class AuditListener implements EventSubscriberInterface
         $this->logger->info(sprintf('Marking store "%s" created', $markingStoreId));
     }
 
-    public function onGet(WorkflowEvent $event)
+    public function onGet(MarkingStoreEvent $event)
     {
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
         $this->logger->info(sprintf('%s/%s get request', $markingStoreId, $subjectId));
     }
 
-    public function onSetting(WorkflowEvent $event)
+    public function onSetting(MarkingStoreEvent $event)
     {
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
@@ -38,7 +38,7 @@ class AuditListener implements EventSubscriberInterface
         $this->logger->info(sprintf('%s/%s set request', $markingStoreId, $subjectId));
     }
 
-    public function onSet(WorkflowEvent $event)
+    public function onSet(MarkingStoreEvent $event)
     {
         $markingStoreId = $event->getMarkingStoreId();
         $subjectId = $event->getSubjectId();
