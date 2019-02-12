@@ -11,12 +11,12 @@ use JBJ\Workflow\MarkingStore\Event\WorkflowEvent;
 use JBJ\Workflow\MarkingStore\MarkingStoreInterface;
 use JBJ\Workflow\MarkingStore\Transformer\MarkingToPlacesTransformer;
 use JBJ\ComposedCollections\Traits\ElementNameTrait;
+use JBJ\ComposedCollections\Traits\CreateIdTrait;
 
 class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 {
-    use ElementNameTrait;
+    use ElementNameTrait, CreateIdTrait;
 
-    private $markingStoreId;
     private $property;
     private $propertyAccessor;
     private $dispatcher;
@@ -29,14 +29,16 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
             throw new \JBJ\Workflow\MarkingStore\Exception\FixMeException('property named "marking" is reserved for symfony/workflow');
         }
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
-        $this->markingStoreId = $this->createId($name);
-        $event = new WorkflowEvent($this->markingStoreId);
+        //todo send event to audit this name change
+        //todo does this name change belong here?
+        $this->setName($this->createId($name));
+        $event = new WorkflowEvent($this->getName());
         $dispatcher->dispatch('workflow.store.created', $event);
     }
 
     public function getMarkingStoreId()
     {
-        return $this->markingStoreId;
+        return $this->getName();
     }
 
     protected function assertValidSubject($subject)
