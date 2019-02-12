@@ -40,7 +40,9 @@ class MarkingStoreShimFunctionalTest extends TestCase
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber($listener);
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $markingStore = new MarkingStoreShim($dispatcher, $propertyAccessor);
+        $markingStore = new MarkingStoreShim();
+        $markingStore->setDispatcher($dispatcher);
+        $markingStore->setPropertyAccessor($propertyAccessor);
         $subject = $this->createAcceptableSubject();
         $subject->setSubjectId('subject1');
         $this->assertEquals([], $markingStore->getMarking($subject)->getPlaces());
@@ -61,7 +63,6 @@ class MarkingStoreShimFunctionalTest extends TestCase
         ];
         $marking = new Marking($expectedplaces);
         $markingStore->setMarking($subject, $marking);
-        $marking = $markingStore->getMarking($subject);
         $places = $markingStore->getMarking($subject)->getPlaces();
         $this->assertEquals($expectedplaces, $places);
     }

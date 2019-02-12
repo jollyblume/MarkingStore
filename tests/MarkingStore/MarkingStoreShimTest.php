@@ -64,19 +64,22 @@ class MarkingStoreShimTest extends TestCase
     /** @expectedException \JBJ\Workflow\Exception\FixMeException */
     public function testPropertyIsMarking()
     {
-        $store = new MarkingStoreShim($this->getDispatcher(), null, 'marking');
+        $store = new MarkingStoreShim('marking');
+        // $store->setDispatcher($this->getDispatcher());
     }
 
     public function testGetMarkingStoreId()
     {
         $validator = new UuidValidator();
-        $store = new MarkingStoreShim($this->getDispatcher());
+        $store = new MarkingStoreShim();
+        $store->setDispatcher($this->getDispatcher());
         $this->assertTrue($validator->validate($store->getMarkingStoreId()));
     }
 
     public function testGetMarkingSetsSubjectIdIfNotSet()
     {
-        $store = new MarkingStoreShim($this->getDispatcher());
+        $store = new MarkingStoreShim();
+        $store->setDispatcher($this->getDispatcher());
         $subject = $this->createAcceptableSubject();
         $marking = $store->getMarking($subject);
         $this->assertInstanceOf(Marking::class, $marking);
@@ -86,7 +89,8 @@ class MarkingStoreShimTest extends TestCase
 
     public function testGetMarkingNotSetSubjectIdIfSet()
     {
-        $store = new MarkingStoreShim($this->getDispatcher());
+        $store = new MarkingStoreShim();
+        $store->setDispatcher($this->getDispatcher());
         $subject = $this->createAcceptableSubject();
         $uuid = '6562eddd-227d-4b94-ba4c-70b94e4101c9';
         $subject->setSubjectId($uuid);
@@ -96,7 +100,8 @@ class MarkingStoreShimTest extends TestCase
 
     public function testSetMarkingSetsSubjectIdIfNotSet()
     {
-        $store = new MarkingStoreShim($this->getDispatcher());
+        $store = new MarkingStoreShim();
+        $store->setDispatcher($this->getDispatcher());
         $subject = $this->createAcceptableSubject();
         $marking = new Marking();
         $store->setMarking($subject, $marking);
@@ -106,7 +111,8 @@ class MarkingStoreShimTest extends TestCase
 
     public function testSetMarkingNotSetSubjectIdIfSet()
     {
-        $store = new MarkingStoreShim($this->getDispatcher());
+        $store = new MarkingStoreShim();
+        $store->setDispatcher($this->getDispatcher());
         $subject = $this->createAcceptableSubject();
         $uuid = '6562eddd-227d-4b94-ba4c-70b94e4101c9';
         $subject->setSubjectId($uuid);
@@ -120,7 +126,8 @@ class MarkingStoreShimTest extends TestCase
      */
     public function testGetMarkingThrowsIfSubjectNotReadable()
     {
-        $store = new MarkingStoreShim($this->getDispatcher());
+        $store = new MarkingStoreShim();
+        $store->setDispatcher($this->getDispatcher());
         $subject = $this->createUnreadableSubject();
         $marking = $store->getMarking($subject);
     }
@@ -130,7 +137,8 @@ class MarkingStoreShimTest extends TestCase
      */
     public function testGetMarkingThrowsIfSubjectNotWritable()
     {
-        $store = new MarkingStoreShim($this->getDispatcher());
+        $store = new MarkingStoreShim();
+        $store->setDispatcher($this->getDispatcher());
         $subject = $this->createUnwritableSubject();
         $marking = $store->getMarking($subject);
     }

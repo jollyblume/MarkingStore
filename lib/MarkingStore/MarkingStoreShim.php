@@ -4,7 +4,6 @@ namespace JBJ\Workflow\MarkingStore\MarkingStore;
 
 use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface as BaseStoreInterface;
 use Symfony\Component\Workflow\Marking;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
@@ -12,28 +11,37 @@ use JBJ\Workflow\MarkingStore\MarkingStoreInterface;
 use JBJ\Workflow\MarkingStore\Transformer\MarkingToPlacesTransformer;
 use JBJ\ComposedCollections\Traits\ElementNameTrait;
 use JBJ\ComposedCollections\Traits\CreateIdTrait;
+use JBJ\Workflow\Traits\EventDispatcherTrait;
+use JBJ\Workflow\Traits\PropertyAccessorTrait;
 
 class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 {
-    use ElementNameTrait, CreateIdTrait;
+    use ElementNameTrait, CreateIdTrait, EventDispatcherTrait, PropertyAccessorTrait;
 
     private $property;
-    private $propertyAccessor;
-    private $dispatcher;
 
-    public function __construct(EventDispatcherInterface $dispatcher, PropertyAccessorInterface $propertyAccessor = null, string $property = 'subjectId', string $name = '')
+    public function __construct(string $property = 'subjectId', string $name = '')
     {
-        $this->dispatcher = $dispatcher;
         $this->property = $property;
         if ('marking' === $property) {
             throw new \JBJ\Workflow\Exception\FixMeException('property named "marking" is reserved for symfony/workflow');
         }
-        $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
         //todo send event to audit this name change
         //todo does this name change belong here?
         $this->setName($this->createId($name));
-        $event = new MarkingStoreEvent($this->getName());
-        $dispatcher->dispatch('workflow.store.created', $event);
+        // todo dispatch in setDispatch() ?
+        // $event = new MarkingStoreEvent($this->getName());
+        // $dispatcher->dispatch('workflow.store.created', $event);
+    }
+
+    protected function getPropertyAccessor()
+    {
+        $propertyAccessor = $this->propertyAccessor;
+        if (null === $propertyAccessor) {
+            $propertyAccessor = PropertyAccess::createPropertyAccessor();
+            $this->setPropertyAccessor($propertyAccessor);
+        }
+        return $propertyAccessor;
     }
 
     public function getMarkingStoreId()
@@ -44,7 +52,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
     protected function assertValidSubject($subject)
     {
         $property = $this->property;
-        $propertyAccessor = $this->propertyAccessor;
+        $propertyAccessor = $this->getPropertyAccessor();
         $isReadable = $propertyAccessor->isReadable($subject, $property);
         $isWritable = $propertyAccessor->isWritable($subject, $property);
         if (!$isReadable || !$isWritable) {
@@ -56,7 +64,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
     {
         $this->assertValidSubject($subject);
         $property = $this->property;
-        $propertyAccessor = $this->propertyAccessor;
+        $propertyAccessor = $this->getPropertyAccessor();
         $subjectId = $propertyAccessor->getValue($subject, $property);
         if (!$subjectId) {
             $subjectId = $this->createId();
