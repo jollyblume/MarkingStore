@@ -14,7 +14,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="workflow">
+        <testsuite name="marking-store">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>
