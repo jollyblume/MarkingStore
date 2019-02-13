@@ -34,7 +34,7 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         // $dispatcher->dispatch('workflow.store.created', $event);
     }
 
-    protected function getPropertyAccessor()
+    public function getPropertyAccessor()
     {
         $propertyAccessor = $this->propertyAccessor;
         if (null === $propertyAccessor) {
