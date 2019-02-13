@@ -4,13 +4,14 @@ namespace JBJ\Workflow\MarkingStore\MarkingStore;
 
 use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface as BaseStoreInterface;
 use Symfony\Component\Workflow\Marking;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
 use JBJ\Workflow\MarkingStore\MarkingStoreInterface;
 use JBJ\Workflow\MarkingStore\Transformer\MarkingToPlacesTransformer;
-use JBJ\ComposedCollections\Traits\ElementNameTrait;
-use JBJ\ComposedCollections\Traits\CreateIdTrait;
+use JBJ\Workflow\Traits\ElementNameTrait;
+use JBJ\Workflow\Traits\CreateIdTrait;
 use JBJ\Workflow\Traits\EventDispatcherTrait;
 use JBJ\Workflow\Traits\PropertyAccessorTrait;
 
@@ -20,8 +21,10 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
 
     private $property;
 
-    public function __construct(string $property = 'subjectId', string $name = '')
+    public function __construct(EventDispatcherInterface $dispatcher, PropertyAccessorInterface $propertyAccessor = null, string $property = 'subjectId', string $name = '')
     {
+        $this->setDispatcher($dispatcher);
+        $this->setPropertyAccessor($propertyAccessor ?: $this->createPropertyAccessor());
         $this->property = $property;
         if ('marking' === $property) {
             throw new \JBJ\Workflow\Exception\FixMeException('property named "marking" is reserved for symfony/workflow');
@@ -32,16 +35,6 @@ class MarkingStoreShim implements BaseStoreInterface, MarkingStoreInterface
         // todo dispatch in setDispatch() ?
         // $event = new MarkingStoreEvent($this->getName());
         // $dispatcher->dispatch('workflow.store.created', $event);
-    }
-
-    public function getPropertyAccessor()
-    {
-        $propertyAccessor = $this->propertyAccessor;
-        if (null === $propertyAccessor) {
-            $propertyAccessor = PropertyAccess::createPropertyAccessor();
-            $this->setPropertyAccessor($propertyAccessor);
-        }
-        return $propertyAccessor;
     }
 
     public function getMarkingStoreId()
