@@ -79,12 +79,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jollyblume/WorkflowCommon.git",
-                "reference": "da2988c8083dc0c309798e67bb40808e9dc88a19"
+                "reference": "143a5388ad5ac9a8f13e57943b6750208fe7fda7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jollyblume/WorkflowCommon/zipball/da2988c8083dc0c309798e67bb40808e9dc88a19",
-                "reference": "da2988c8083dc0c309798e67bb40808e9dc88a19",
+                "url": "https://api.github.com/repos/jollyblume/WorkflowCommon/zipball/143a5388ad5ac9a8f13e57943b6750208fe7fda7",
+                "reference": "143a5388ad5ac9a8f13e57943b6750208fe7fda7",
                 "shasum": ""
             },
             "require": {
@@ -117,7 +117,7 @@
                 }
             ],
             "description": "Utility classes and common code",
-            "time": "2019-02-15T08:35:22+00:00"
+            "time": "2019-02-16T20:26:30+00:00"
         },
         {
             "name": "moontoast/math",
@@ -1352,16 +1352,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.4",
+            "version": "7.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2896657da5fb237bc316bdfc18c2650efeee0dc0"
+                "reference": "23a200a60552cb9ba483a8d1e106c70fb0be0bb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2896657da5fb237bc316bdfc18c2650efeee0dc0",
-                "reference": "2896657da5fb237bc316bdfc18c2650efeee0dc0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/23a200a60552cb9ba483a8d1e106c70fb0be0bb9",
+                "reference": "23a200a60552cb9ba483a8d1e106c70fb0be0bb9",
                 "shasum": ""
             },
             "require": {
@@ -1432,7 +1432,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-02-07T14:15:04+00:00"
+            "time": "2019-02-15T14:00:34+00:00"
         },
         {
             "name": "psr/log",
