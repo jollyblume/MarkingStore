@@ -4,6 +4,11 @@ namespace JBJ\Workflow\MarkingStore\Transformer;
 
 use Symfony\Component\Workflow\Marking;
 
+/**
+ * MarkingToPlacesTransformer
+ *
+ * Transforms a symfony/workflow::Marking <-> array of places
+ */
 class MarkingToPlacesTransformer
 {
     /**
@@ -14,7 +19,7 @@ class MarkingToPlacesTransformer
      */
     public function transform($marking)
     {
-        if (null === $marking) {
+        if (!$marking instanceof Marking) {
             return [];
         }
         $places = array_keys($marking->getPlaces());
@@ -30,8 +35,8 @@ class MarkingToPlacesTransformer
     public function reverseTransform($places)
     {
         $transformedPlaces = array_flip($places);
-        foreach ($transformedPlaces as $key => $value) {
-            $transformedPlaces[$key] = 1;
+        foreach (array_keys($transformedPlaces) as $value) {
+            $transformedPlaces[$value] = 1;
         }
         $marking = new Marking($transformedPlaces);
         return $marking;
