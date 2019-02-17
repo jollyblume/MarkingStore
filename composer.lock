@@ -79,12 +79,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jollyblume/WorkflowCommon.git",
-                "reference": "dfb737f177be5b7d2462d703e813bb970dcf8681"
+                "reference": "a9ef7c10ce118475469b8b27ead61df804eed683"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jollyblume/WorkflowCommon/zipball/dfb737f177be5b7d2462d703e813bb970dcf8681",
-                "reference": "dfb737f177be5b7d2462d703e813bb970dcf8681",
+                "url": "https://api.github.com/repos/jollyblume/WorkflowCommon/zipball/a9ef7c10ce118475469b8b27ead61df804eed683",
+                "reference": "a9ef7c10ce118475469b8b27ead61df804eed683",
                 "shasum": ""
             },
             "require": {
@@ -93,8 +93,7 @@
                 "php": "^7.1.3",
                 "ramsey/uuid": "^3.8",
                 "symfony/event-dispatcher": "^4.2",
-                "symfony/property-access": "^4.2",
-                "symfony/workflow": "^4.2"
+                "symfony/property-access": "^4.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.5",
@@ -117,7 +116,7 @@
                 }
             ],
             "description": "Utility classes and common code",
-            "time": "2019-02-17T17:29:51+00:00"
+            "time": "2019-02-17T19:24:17+00:00"
         },
         {
             "name": "moontoast/math",
