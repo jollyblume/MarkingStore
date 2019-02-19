@@ -79,12 +79,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jollyblume/WorkflowCommon.git",
-                "reference": "6659442e77093866afdd4946c8264608e2a3553e"
+                "reference": "017d78682992f304723bfbe2c508eaa76009c4e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jollyblume/WorkflowCommon/zipball/6659442e77093866afdd4946c8264608e2a3553e",
-                "reference": "6659442e77093866afdd4946c8264608e2a3553e",
+                "url": "https://api.github.com/repos/jollyblume/WorkflowCommon/zipball/017d78682992f304723bfbe2c508eaa76009c4e5",
+                "reference": "017d78682992f304723bfbe2c508eaa76009c4e5",
                 "shasum": ""
             },
             "require": {
@@ -116,7 +116,7 @@
                 }
             ],
             "description": "Utility classes and common code",
-            "time": "2019-02-19T05:00:55+00:00"
+            "time": "2019-02-19T22:08:15+00:00"
         },
         {
             "name": "moontoast/math",
