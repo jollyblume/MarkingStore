@@ -1,4 +1,7 @@
 ## jollyblume/workflow
+
+### This component is in heavy development. Don't count on anything working.
+
 ###### This component adds a light weight, multi-tenant Marking Store to symfony/workflow.
 This component is built on **symfony/workflow** and is a different implementation of symfony's *MarkingStoreInterface*
 
