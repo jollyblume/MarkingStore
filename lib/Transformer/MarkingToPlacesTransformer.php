@@ -34,7 +34,7 @@ class MarkingToPlacesTransformer
      */
     public function reverseTransform($places)
     {
-        $transformedPlaces = array_flip($places);
+        $transformedPlaces = array_flip((array) $places);
         foreach (array_keys($transformedPlaces) as $value) {
             $transformedPlaces[$value] = 1;
         }

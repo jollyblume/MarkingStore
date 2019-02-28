@@ -2,13 +2,12 @@
 
 namespace JBJ\Workflow\MarkingStore;
 
-interface MarkingStoreInterface
+use JBJ\Workflow\MarkingStore\MarkingStoreInterface as BaseInterface;
+
+interface MarkingStoreInterface implements BaseInterface
 {
     /**
      * @return string $storeId
      */
-    public function getMarkingStoreId();
-
-    // public function getStores();
-    // public function setStores(?StoreCollectionInterface $stores);
+    public function getName();
 }

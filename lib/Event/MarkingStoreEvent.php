@@ -3,33 +3,46 @@
 namespace JBJ\Workflow\MarkingStore\Event;
 
 use JBJ\Workflow\Event\WorkflowEvent;
+use JBJ\Workflow\MarkingStore\MediatorInterface;
 
 class MarkingStoreEvent extends WorkflowEvent
 {
-    private $markingStoreId;
-    private $subjectId;
+    private $storeName;
+    private $subjectUuid;
+    private $property;
     private $places;
+    private $mediator;
 
-    public function __construct(string $markingStoreId, string $subjectId = '', array $places = [])
+    public function __construct(string $storeName, string $subjectUuid, string $property, MediatorInterface $mediator, $places = [])
     {
-        $this->markingStoreId = $markingStoreId;
-        $this->subjectId = $subjectId;
-        $this->places = $places;
+        $this->storeName = $storeName;
+        $this->subjectUuid = $subjectUuid;
+        $this->property = $property;
+        $this->mediator = $mediator;
+        $this->places = (array) $places;
     }
-    public function getMarkingStoreId()
+    public function getStoreName()
     {
-        return $this->markingStoreId;
+        return $this->storeName;
     }
-    public function getSubjectId()
+    public function getSubjectUuid()
     {
-        return $this->subjectId;
+        return $this->subjectUuid;
+    }
+    public function getProperty()
+    {
+        return $this->property;
+    }
+    public function getMediator()
+    {
+        return $this->mediator;
     }
     public function getPlaces()
     {
         return $this->places;
     }
-    public function setPlaces(array $places)
+    public function setPlaces($places)
     {
-        $this->places = $places;
+        $this->places = (array) $places;
     }
 }
