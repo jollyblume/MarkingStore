@@ -26,7 +26,7 @@ class Shim implements MarkingStoreInterface
             throw new InvalidArgumentException('The property named "marking" is reserved for symfony/workflow');
         }
         $this->setName($name ?: $mediator->createUuid());
-        $mediator->dispatchCreated($name, $property);
+        $mediator->notifyCreated($name, $property);
         $this->mediator = $mediator;
     }
 

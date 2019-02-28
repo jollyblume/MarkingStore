@@ -31,19 +31,24 @@ class Mediator implements MediatorInterface
         if (!$dispatcher) {
             throw new DomainException('No event dispatcher configured');
         }
-        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, (array) $places);
+        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, $this, (array) $places);
         $dispatcher->dispatch($eventName, $event);
         return $event;
     }
 
-    protected function getPlaces(string $storeName, string $subjectUuid, string $property)
+    public function notifyCreated(string $storeName, string $property)
+    {
+        $this->sendEvent('workflow.store.created', $storeName, '', $property);
+    }
+
+    public function getPlaces(string $storeName, string $subjectUuid, string $property)
     {
         $event = $this->sendEvent('workflow.places.get', $storeName, $subjectUuid, $property);
         $places = $event->getPlaces();
         return $places;
     }
 
-    protected function setPlaces(string $storeName, string $subjectUuid, string $property, $places)
+    public function setPlaces(string $storeName, string $subjectUuid, string $property, $places)
     {
         $event = $this->sendEvent('workflow.places.setting', $storeName, $subjectUuid, $property, $places);
         $event = $this->sendEvent('workflow.places.set', $storeName, $subjectUuid, $property, $places);
@@ -60,7 +65,7 @@ class Mediator implements MediatorInterface
         return $this->property;
     }
 
-    public function createUuid($name = '')
+    public function createUuid(string $name = '')
     {
         return $this->createId($name);
     }

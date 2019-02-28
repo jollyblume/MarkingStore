@@ -8,6 +8,6 @@ interface MediatorInterface
     public function setPlaces(string $storeName, string $subjectUuid, string $property, $places);
     public function getPropertyAccessor();
     public function getDefaultProperty();
-    public function createUuid($name);
-    public function dispatchCreated(string $name, string $property);
+    public function createUuid(string $name = '');
+    public function notifyCreated(string $storeName, string $property);
 }
