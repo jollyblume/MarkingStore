@@ -4,17 +4,17 @@ namespace JBJ\Workflow\MarkingStore;
 
 use Psr\Log\LoggerInterface;
 use JBJ\Workflow\Traits\NameTrait;
-use JBJ\Workflow\Traits\CreateIdTrait;
+use JBJ\Workflow\Traits\CreateUuidTrait;
 
 class InMemoryMarkings
 {
-    use NameTrait, CreateIdTrait;
+    use NameTrait, CreateUuidTrait;
 
     private $markings;
 
     public function __construct(string $name, array $markings = [])
     {
-        $this->setName($name ?: $this->createId($name));
+        $this->setName($name ?: $this->CreateUuid($name));
         $this->markings = $markings;
     }
 

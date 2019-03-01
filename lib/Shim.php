@@ -6,7 +6,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Workflow\MarkingStoreInterface;
 use Symfony\Component\Workflow\Marking;
 use JBJ\Workflow\MarkingStore\Transformer\MarkingToPlacesTransformer;
-use JBJ\Workflow\Traits\CreateIdTrait;
 use JBJ\Workflow\Traits\NameTrait;
 use JBJ\Workflow\Traits\PropertyAccessorTrait;
 use JBJ\Workflow\Exception\InvalidArgumentException;
@@ -48,7 +47,7 @@ class Shim implements MarkingStoreInterface
         $propertyAccessor = $this->getPropertyAccessor();
         $subjectUuid = $propertyAccessor->getValue($subject, $property);
         if (!$subjectUuid) {
-            $subjectUuid = $this->mediator->createId();
+            $subjectUuid = $this->mediator->createUuid();
             $propertyAccessor->setValue($subject, $property, $subjectUuid);
         }
         return $subjectUuid;

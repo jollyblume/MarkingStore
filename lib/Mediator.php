@@ -5,7 +5,7 @@ namespace JBJ\Workflow\MarkingStore;
 use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
 use JBJ\Workflow\Traits\NameTrait;
 use JBJ\Workflow\Traits\ParentTrait;
-use JBJ\Workflow\Traits\CreateIdTrait;
+use JBJ\Workflow\Traits\CreateUuidTrait;
 use JBJ\Workflow\Traits\EventDispatcherTrait;
 use JBJ\Workflow\Traits\PropertyAccessorTrait;
 use JBJ\Workflow\Exception\DomainException;
@@ -13,8 +13,9 @@ use JBJ\Workflow\Exception\InvalidArgumentException;
 
 class Mediator implements MediatorInterface
 {
-    use NameTrait, ParentTrait, CreateIdTrait, EventDispatcherTrait, PropertyAccessorTrait {
+    use NameTrait, ParentTrait, CreateUuidTrait, EventDispatcherTrait, PropertyAccessorTrait {
         setDispatcher as public;
+        createUuid as public;
     }
 
     private $property;
@@ -28,11 +29,16 @@ class Mediator implements MediatorInterface
         }
     }
 
+    public function getDefaultProperty()
+    {
+        return $this->property;
+    }
+
     protected function sendEvent(string $eventName, string $storeName, string $subjectUuid, string $property, $places = [])
     {
-        $dispatcher = $this->dispatcher;
+        $dispatcher = $this->getDispatcher();
         if (!$dispatcher) {
-            throw new DomainException('No event dispatcher configured');
+            return false;
         }
         $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, $this, (array) $places);
         $dispatcher->dispatch($eventName, $event);
@@ -41,40 +47,29 @@ class Mediator implements MediatorInterface
 
     public function notifyCreated(string $storeName, string $property)
     {
-        $this->sendEvent('workflow.store.created', $storeName, '', $property);
+        $event = $this->sendEvent('workflow.store.created', $storeName, '', $property);
+        return $event !== false;
     }
 
     public function getPlaces(string $storeName, string $subjectUuid, string $property)
     {
         $event = $this->sendEvent('workflow.places.get', $storeName, $subjectUuid, $property);
-        $places = $event->getPlaces();
+        $places = $event === false ? false : $event->getPlaces();
         return $places;
     }
 
     public function setPlaces(string $storeName, string $subjectUuid, string $property, $places)
     {
-        $this->sendEvent('workflow.places.setting', $storeName, $subjectUuid, $property, $places);
-        $this->sendEvent('workflow.places.set', $storeName, $subjectUuid, $property, $places);
+        $event = $this->sendEvent('workflow.places.setting', $storeName, $subjectUuid, $property, $places);
+        if ($event) {
+            $event = $this->sendEvent('workflow.places.set', $storeName, $subjectUuid, $property, $places);
+        }
+        return $event !== false;
     }
 
     public function getPropertyAccessor()
     {
         $propertyAccessor = $this->propertyAccessor ?: $this->createPropertyAccessor();
         return $propertyAccessor;
-    }
-
-    public function getDefaultProperty()
-    {
-        return $this->property;
-    }
-
-    public function createUuid(string $name = '')
-    {
-        return $this->createId($name);
-    }
-
-    public function __toString()
-    {
-        return $this->getName();
     }
 }
