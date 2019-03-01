@@ -12,7 +12,9 @@ use JBJ\Workflow\Exception\DomainException;
 
 class Shim implements MarkingStoreInterface
 {
-    use NameTrait, PropertyAccessorTrait;
+    use NameTrait, PropertyAccessorTrait {
+        setPropertyAccessor as protected;
+    }
 
     private $mediator;
     private $property;
@@ -20,12 +22,15 @@ class Shim implements MarkingStoreInterface
     public function __construct(MediatorInterface $mediator, string $name = '', string $property = '')
     {
         $this->setPropertyAccessor($mediator->getPropertyAccessor());
+        $this->setName($name ?: $mediator->createUuid());
         $this->property = $property ?: $mediator->getDefaultProperty();
         if ('marking' === $property) {
             throw new InvalidArgumentException('The property named "marking" is reserved for symfony/workflow');
         }
-        $this->setName($name ?: $mediator->createUuid());
-        $mediator->notifyCreated($name, $property);
+        $success = $mediator->notifyCreated($name, $property);
+        if (!$success) {
+            throw new DomainException('Event dispatcher not set on mediator "%s"', strval($mediator));
+        }
         $this->mediator = $mediator;
     }
 
