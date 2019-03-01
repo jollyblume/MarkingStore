@@ -149,6 +149,9 @@ class MediatorTest extends TestCase
         $places = $mediator->getPlaces('test.store', 'test.subject.uuid', 'test.property');
         $this->assertEquals(['harry', 'sally'], $places);
         $this->assertEquals(['test.store/test.subject.uuid/test.property' => ['harry', 'sally']], $store->getMarkings());
+        $mediator->setPlaces('test.store', 'test.subject.uuid', 'test.property', []);
+        $this->assertEquals([], $store->getMarkings());
+        $this->assertEquals([], $mediator->getPlaces('notastore', 'notasubject', 'notaproperty'));
     }
 
     public function testToString()
