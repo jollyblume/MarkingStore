@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\MarkingStore\MarkingStore;
+namespace JBJ\Workflow\MarkingStore;
 
 use Psr\Log\LoggerInterface;
 use JBJ\Workflow\Traits\NameTrait;

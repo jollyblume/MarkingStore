@@ -1,9 +1,9 @@
 <?php
 
-namespace JBJ\Workflow\MarkingStore\MarkingStore;
+namespace JBJ\Workflow\MarkingStore;
 
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface;
+use Symfony\Component\Workflow\MarkingStoreInterface;
 use Symfony\Component\Workflow\Marking;
 use JBJ\Workflow\MarkingStore\Transformer\MarkingToPlacesTransformer;
 use JBJ\Workflow\Traits\CreateIdTrait;

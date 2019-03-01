@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\MarkingStore\MarkingStore;
+namespace JBJ\Workflow\MarkingStore;
 
 use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
 use JBJ\Workflow\Traits\NameTrait;

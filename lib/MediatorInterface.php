@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\MarkingStore\MarkingStore;
+namespace JBJ\Workflow\MarkingStore;
 
 interface MediatorInterface
 {

@@ -3,7 +3,7 @@
 namespace JBJ\Workflow\MarkingStore\Tests\Event;
 
 use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
-use JBJ\Workflow\MarkingStore\MarkingStore\MediatorInterface;
+use JBJ\Workflow\MarkingStore\MediatorInterface;
 use PHPUnit\Framework\TestCase;
 
 class MarkingStoreEventTest extends TestCase

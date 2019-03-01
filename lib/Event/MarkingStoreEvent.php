@@ -3,7 +3,7 @@
 namespace JBJ\Workflow\MarkingStore\Event;
 
 use JBJ\Workflow\Event\WorkflowEvent;
-use JBJ\Workflow\MarkingStore\MarkingStore\MediatorInterface;
+use JBJ\Workflow\MarkingStore\MediatorInterface;
 
 class MarkingStoreEvent extends WorkflowEvent
 {
