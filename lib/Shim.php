@@ -34,9 +34,14 @@ class Shim implements MarkingStoreInterface
         $this->mediator = $mediator;
     }
 
+    public function getProperty()
+    {
+        return $this->property;
+    }
+
     protected function assertValidSubject($subject)
     {
-        $property = $this->property;
+        $property = $this->getProperty();
         $propertyAccessor = $this->getPropertyAccessor();
         $isReadable = $propertyAccessor->isReadable($subject, $property);
         $isWritable = $propertyAccessor->isWritable($subject, $property);
@@ -48,7 +53,7 @@ class Shim implements MarkingStoreInterface
     protected function getSubjectUuid($subject)
     {
         $this->assertValidSubject($subject);
-        $property = $this->property;
+        $property = $this->getProperty();
         $propertyAccessor = $this->getPropertyAccessor();
         $subjectUuid = $propertyAccessor->getValue($subject, $property);
         if (!$subjectUuid) {
@@ -62,7 +67,7 @@ class Shim implements MarkingStoreInterface
     {
         $subjectUuid = $this->getSubjectUuid($subject);
         $storeName = $this->getName();
-        $property = $this->property;
+        $property = $this->getProperty();
         $mediator = $this->mediator;
         $places = $mediator->getPlaces($storeName, $subjectUuid, $property);
         if (false === $places) {
@@ -77,7 +82,7 @@ class Shim implements MarkingStoreInterface
     {
         $subjectUuid = $this->getSubjectId($subject);
         $storeName = $this->getMarkingStoreId();
-        $property = $this->property;
+        $property = $this->getProperty();
         $transformer = new MarkingToPlacesTransformer();
         $places = $transformer->transform($marking);
         $mediator = $this->mediator;
