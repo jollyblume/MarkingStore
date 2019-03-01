@@ -1,4 +1,4 @@
-,<?php
+<?php
 
 namespace JBJ\Workflow\MarkingStore\EventListener;
 
@@ -18,8 +18,8 @@ class InMemoryMarkingsListener implements EventSubscriberInterface
             'storeName' => $event->getStoreName(),
             'subjectUuid' => $event->getSubjectUuid(),
             'property' => $event->getProperty(),
-            'mediator' => $event->getMediator()->getName(),
-            'places' => join(',', $event->getPlaces()),
+            'mediator' => $event->getMediator(),
+            'places' => $event->getPlaces(),
         ];
         $msg = sprintf('[%s] %s', $method, $msg);
         $this->logger->info($msg, $context);

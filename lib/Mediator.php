@@ -9,19 +9,22 @@ use JBJ\Workflow\Traits\CreateIdTrait;
 use JBJ\Workflow\Traits\EventDispatcherTrait;
 use JBJ\Workflow\Traits\PropertyAccessorTrait;
 use JBJ\Workflow\Exception\DomainException;
+use JBJ\Workflow\Exception\InvalidArgumentException;
 
 class Mediator implements MediatorInterface
 {
-    use NameTrait, ParentTrait, CreateIdTrait, EventDispatcherTrait, PropertyAccessorTrait;
+    use NameTrait, ParentTrait, CreateIdTrait, EventDispatcherTrait, PropertyAccessorTrait {
+        setDispatcher as public;
+    }
 
     private $property;
 
-    public function __construct(string $name, string $property = 'subjectId')
+    public function __construct(string $name, string $property = 'subjectUuid')
     {
         $this->setName($name);
         $this->property = $property;
         if ('marking' === $property) {
-            throw new \JBJ\Workflow\Exception\FixMeException('The property named "marking" is reserved for symfony/workflow');
+            throw new InvalidArgumentException('The property named "marking" is reserved for symfony/workflow');
         }
     }
 
@@ -50,8 +53,8 @@ class Mediator implements MediatorInterface
 
     public function setPlaces(string $storeName, string $subjectUuid, string $property, $places)
     {
-        $event = $this->sendEvent('workflow.places.setting', $storeName, $subjectUuid, $property, $places);
-        $event = $this->sendEvent('workflow.places.set', $storeName, $subjectUuid, $property, $places);
+        $this->sendEvent('workflow.places.setting', $storeName, $subjectUuid, $property, $places);
+        $this->sendEvent('workflow.places.set', $storeName, $subjectUuid, $property, $places);
     }
 
     public function getPropertyAccessor()
@@ -68,5 +71,10 @@ class Mediator implements MediatorInterface
     public function createUuid(string $name = '')
     {
         return $this->createId($name);
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }
