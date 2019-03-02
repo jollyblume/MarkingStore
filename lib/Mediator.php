@@ -41,8 +41,7 @@ class Mediator implements MediatorInterface
             return false;
         }
         $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, $this, (array) $places);
-        $dispatcher->dispatch($eventName, $event);
-        return $event;
+        return $dispatcher->dispatch($eventName, $event);
     }
 
     public function notifyCreated(string $storeName, string $property)
