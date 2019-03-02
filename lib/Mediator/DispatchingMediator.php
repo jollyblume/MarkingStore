@@ -1,7 +1,8 @@
 <?php
 
-namespace JBJ\Workflow\MarkingStore;
+namespace JBJ\Workflow\MarkingStore\Mediator;
 
+use JBJ\Workflow\MarkingStore\MediatorInterface;
 use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
 use JBJ\Workflow\Traits\NameTrait;
 use JBJ\Workflow\Traits\ParentTrait;
@@ -11,7 +12,7 @@ use JBJ\Workflow\Traits\PropertyAccessorTrait;
 use JBJ\Workflow\Exception\DomainException;
 use JBJ\Workflow\Exception\InvalidArgumentException;
 
-class Mediator implements MediatorInterface
+class DispatchingMediator implements MediatorInterface
 {
     use NameTrait, ParentTrait, CreateUuidTrait, EventDispatcherTrait, PropertyAccessorTrait {
         setDispatcher as public;

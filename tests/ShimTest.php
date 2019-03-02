@@ -10,7 +10,7 @@ use Symfony\Component\Workflow\Marking;
 use Ramsey\Uuid\Validator\Validator as UuidValidator;
 use JBJ\Workflow\MarkingStore\EventListener\InMemoryMarkingsListener;
 use JBJ\Workflow\MarkingStore\InMemoryMarkings;
-use JBJ\Workflow\MarkingStore\Mediator;
+use JBJ\Workflow\MarkingStore\Mediator\DispatchingMediator;
 use JBJ\Workflow\MarkingStore\Shim;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +18,7 @@ class ShimTest extends TestCase
 {
     public function testDefaults()
     {
-        $mediator = new Mediator('test.mediator', 'test-property');
+        $mediator = new DispatchingMediator('test.mediator', 'test-property');
         $mediator->setDispatcher(new EventDispatcher());
         $shim = new Shim($mediator);
         $validator = new UuidValidator();
@@ -29,7 +29,7 @@ class ShimTest extends TestCase
 
     public function testDefaultsWithPropertySeAtShim()
     {
-        $mediator = new Mediator('test.mediator', 'masked-property');
+        $mediator = new DispatchingMediator('test.mediator', 'masked-property');
         $mediator->setDispatcher(new EventDispatcher());
         $shim = new Shim($mediator, 'test.shim', 'test-property');
         $this->assertEquals('test.shim', $shim->getName());
@@ -39,7 +39,7 @@ class ShimTest extends TestCase
     /** @expectedException \JBJ\Workflow\Exception\DomainException */
     public function testNoDispatcherSetOnMediatorThrows()
     {
-        $mediator = new Mediator('test.mediator');
+        $mediator = new DispatchingMediator('test.mediator');
         new Shim($mediator);
     }
 
@@ -86,7 +86,7 @@ class ShimTest extends TestCase
 
     public function testGetMarking()
     {
-        $mediator = new Mediator('test.mediator', 'testProperty');
+        $mediator = new DispatchingMediator('test.mediator', 'testProperty');
         $mediator->setDispatcher(new EventDispatcher());
         $shim = new Shim($mediator);
         $subject = $this->createSubject();
@@ -99,7 +99,7 @@ class ShimTest extends TestCase
     /** @expectedException \JBJ\Workflow\Exception\DomainException */
     public function testGetMarkingThrowsIfSubjectIsArray()
     {
-        $mediator = new Mediator('test.mediator', 'testProperty');
+        $mediator = new DispatchingMediator('test.mediator', 'testProperty');
         $mediator->setDispatcher(new EventDispatcher());
         $shim = new Shim($mediator);
         $subject = [];
@@ -109,7 +109,7 @@ class ShimTest extends TestCase
     /** @expectedException \JBJ\Workflow\Exception\InvalidArgumentException */
     public function testGetMarkingThrowsIfSubjectIsUnreadable()
     {
-        $mediator = new Mediator('test.mediator', 'testProperty');
+        $mediator = new DispatchingMediator('test.mediator', 'testProperty');
         $mediator->setDispatcher(new EventDispatcher());
         $shim = new Shim($mediator);
         $subject = $this->createBrokenSubject();
@@ -119,7 +119,7 @@ class ShimTest extends TestCase
     /** @expectedException \JBJ\Workflow\Exception\InvalidArgumentException */
     public function testGetMarkingThrowsIfSubjectIsUnwritable()
     {
-        $mediator = new Mediator('test.mediator', 'testProperty');
+        $mediator = new DispatchingMediator('test.mediator', 'testProperty');
         $mediator->setDispatcher(new EventDispatcher());
         $shim = new Shim($mediator);
         $subject = $this->createReadOnlySubject();
@@ -128,7 +128,7 @@ class ShimTest extends TestCase
 
     public function testGetMarkingOkIfSubjectIsUnwritableButHasUuidSet()
     {
-        $mediator = new Mediator('test.mediator', 'testProperty');
+        $mediator = new DispatchingMediator('test.mediator', 'testProperty');
         $mediator->setDispatcher(new EventDispatcher());
         $shim = new Shim($mediator);
         $subject = $this->createReadOnlySubject('be0daef6-5737-48f4-b3ad-9bd032637e2b');
@@ -167,7 +167,7 @@ class ShimTest extends TestCase
 
     public function testSetMarking()
     {
-        $mediator = new Mediator('test.mediator', 'testProperty');
+        $mediator = new DispatchingMediator('test.mediator', 'testProperty');
         $dispatcher = new EventDispatcher();
         $store = new InMemoryMarkings('test.markings');
         $logger = $this->getLogger();

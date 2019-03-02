@@ -7,7 +7,7 @@ use Psr\Log\LoggerTrait;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use JBJ\Workflow\MarkingStore\Mediator;
+use JBJ\Workflow\MarkingStore\Mediator\DispatchingMediator;
 use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
 use JBJ\Workflow\MarkingStore\EventListener\InMemoryMarkingsListener;
 use JBJ\Workflow\MarkingStore\InMemoryMarkings;
@@ -71,7 +71,7 @@ class MediatorTest extends TestCase
 
     public function testDefaults()
     {
-        $mediator = new Mediator('test.mediator');
+        $mediator = new DispatchingMediator('test.mediator');
         $this->assertEquals('test.mediator', $mediator->getName());
         $this->assertEquals('subjectUuid', $mediator->getDefaultProperty());
         $this->assertInstanceOf(PropertyAccessorInterface::class, $mediator->getPropertyAccessor());
@@ -83,19 +83,19 @@ class MediatorTest extends TestCase
 
     public function testDefaultsWithPropertySet()
     {
-        $mediator = new Mediator('test.mediator', 'test.id');
+        $mediator = new DispatchingMediator('test.mediator', 'test.id');
         $this->assertEquals('test.id', $mediator->getDefaultProperty());
     }
 
     /** @expectedException \JBJ\Workflow\Exception\InvalidArgumentException */
     public function testPropertySetToMarkingThrows()
     {
-        new Mediator('test.mediator', 'marking');
+        new DispatchingMediator('test.mediator', 'marking');
     }
 
     public function testSetDispatcher()
     {
-        $mediator = new Mediator('test.mediator');
+        $mediator = new DispatchingMediator('test.mediator');
         $dispatcher = new EventDispatcher();
         $mediator->setDispatcher($dispatcher);
         $this->assertEquals($dispatcher, $mediator->getDispatcher());
@@ -103,7 +103,7 @@ class MediatorTest extends TestCase
 
     public function testNotifyCreated()
     {
-        $mediator = new Mediator('test.mediator');
+        $mediator = new DispatchingMediator('test.mediator');
         $dispatcher = new EventDispatcher();
         $subscriber = $this->getSubscriber();
         $dispatcher->addSubscriber($subscriber);
@@ -116,7 +116,7 @@ class MediatorTest extends TestCase
 
     public function tesGetPlaces()
     {
-        $mediator = new Mediator('test.mediator');
+        $mediator = new DispatchingMediator('test.mediator');
         $dispatcher = new EventDispatcher();
         $subscriber = $this->getSubscriber();
         $dispatcher->addSubscriber($subscriber);
@@ -131,7 +131,7 @@ class MediatorTest extends TestCase
 
     public function testSetPlacesInitializesEvent()
     {
-        $mediator = new Mediator('test.mediator');
+        $mediator = new DispatchingMediator('test.mediator');
         $dispatcher = new EventDispatcher();
         $subscriber = $this->getSubscriber();
         $dispatcher->addSubscriber($subscriber);
@@ -146,7 +146,7 @@ class MediatorTest extends TestCase
 
     public function testSetPlaces()
     {
-        $mediator = new Mediator('test.mediator');
+        $mediator = new DispatchingMediator('test.mediator');
         $dispatcher = new EventDispatcher();
         $subscriber = $this->getSubscriber();
         $dispatcher->addSubscriber($subscriber);
@@ -167,7 +167,7 @@ class MediatorTest extends TestCase
 
     public function testStoreCreated()
     {
-        $mediator = new Mediator('test.mediator');
+        $mediator = new DispatchingMediator('test.mediator');
         $dispatcher = new EventDispatcher();
         $subscriber = $this->getSubscriber();
         $dispatcher->addSubscriber($subscriber);
