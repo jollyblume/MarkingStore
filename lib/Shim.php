@@ -42,7 +42,7 @@ class Shim implements MarkingStoreInterface
         $propertyAccessor = $this->getPropertyAccessor();
         $isReadable = $propertyAccessor->isReadable($subject, $property);
         if (!$isReadable) {
-            throw new DomainException("The subject's uuid is not readable.");
+            throw new InvalidArgumentException("The subject's uuid is not readable.");
         }
     }
 
@@ -93,11 +93,12 @@ class Shim implements MarkingStoreInterface
     public function setMarking($subject, Marking $marking)
     {
         $property = $this->getProperty();
-        $subjectUuid = $this->getSubjectId($subject);
+        $subjectUuid = $this->getSubjectUuid($subject);
         $storeName = $this->getName();
         $transformer = new MarkingToPlacesTransformer();
         $places = $transformer->transform($marking);
         $mediator = $this->mediator;
         $mediator->setPlaces($storeName, $subjectUuid, $property, $places);
+        return $this;
     }
 }
