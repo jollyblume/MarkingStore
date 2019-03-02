@@ -52,12 +52,20 @@ class Shim implements MarkingStoreInterface
         $propertyAccessor = $this->getPropertyAccessor();
         $isWritable = $propertyAccessor->isWritable($subject, $property);
         if (!$isWritable) {
-            throw new DomainException("The subject's uuid is not writable.");
+            throw new InvalidArgumentException("The subject's uuid is not writable.");
+        }
+    }
+
+    protected function assertSubjectIsObject($subject)
+    {
+        if (!is_object($subject)) {
+            throw new DomainException('The subject must be an object');
         }
     }
 
     protected function getSubjectUuid($subject)
     {
+        $this->assertSubjectIsObject($subject);
         $this->assertSubjectIsReadable($subject);
         $propertyAccessor = $this->getPropertyAccessor();
         $property = $this->getProperty();
