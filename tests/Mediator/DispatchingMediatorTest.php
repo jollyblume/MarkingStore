@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\MarkingStore\Tests;
+namespace JBJ\Workflow\MarkingStore\Tests\Mediator;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
@@ -13,7 +13,7 @@ use JBJ\Workflow\MarkingStore\EventListener\InMemoryMarkingsListener;
 use JBJ\Workflow\MarkingStore\InMemoryMarkings;
 use PHPUnit\Framework\TestCase;
 
-class MediatorTest extends TestCase
+class DispatchingMediatorTest extends TestCase
 {
     protected function getSubscriber()
     {
