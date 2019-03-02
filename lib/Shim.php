@@ -2,7 +2,7 @@
 
 namespace JBJ\Workflow\MarkingStore;
 
-use Symfony\Component\Workflow\MarkingStoreInterface;
+use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface;
 use Symfony\Component\Workflow\Marking;
 use JBJ\Workflow\MarkingStore\Transformer\MarkingToPlacesTransformer;
 use JBJ\Workflow\Traits\NameTrait;
@@ -24,12 +24,9 @@ class Shim implements MarkingStoreInterface
         $this->setPropertyAccessor($mediator->getPropertyAccessor());
         $this->setName($name ?: $mediator->createUuid());
         $this->property = $property ?: $mediator->getDefaultProperty();
-        if ('marking' === $property) {
-            throw new InvalidArgumentException('The property named "marking" is reserved for symfony/workflow');
-        }
         $success = $mediator->notifyCreated($name, $property);
         if (!$success) {
-            throw new DomainException('Event dispatcher not set on mediator "%s"', strval($mediator));
+            throw new DomainException(sprintf('Event dispatcher not set on mediator "%s"', strval($mediator)));
         }
         $this->mediator = $mediator;
     }
@@ -39,24 +36,34 @@ class Shim implements MarkingStoreInterface
         return $this->property;
     }
 
-    protected function assertValidSubject($subject)
+    protected function assertSubjectIsReadable($subject)
     {
         $property = $this->getProperty();
         $propertyAccessor = $this->getPropertyAccessor();
         $isReadable = $propertyAccessor->isReadable($subject, $property);
+        if (!$isReadable) {
+            throw new DomainException("The subject's uuid is not readable.");
+        }
+    }
+
+    protected function assertSubjectIsWritable($subject)
+    {
+        $property = $this->getProperty();
+        $propertyAccessor = $this->getPropertyAccessor();
         $isWritable = $propertyAccessor->isWritable($subject, $property);
-        if (!$isReadable || !$isWritable) {
-            throw new DomainException("The subject's uuid is either not readable or not writable.");
+        if (!$isWritable) {
+            throw new DomainException("The subject's uuid is not writable.");
         }
     }
 
     protected function getSubjectUuid($subject)
     {
-        $this->assertValidSubject($subject);
-        $property = $this->getProperty();
+        $this->assertSubjectIsReadable($subject);
         $propertyAccessor = $this->getPropertyAccessor();
+        $property = $this->getProperty();
         $subjectUuid = $propertyAccessor->getValue($subject, $property);
         if (!$subjectUuid) {
+            $this->assertSubjectIsWritable($subject);
             $subjectUuid = $this->mediator->createUuid();
             $propertyAccessor->setValue($subject, $property, $subjectUuid);
         }
@@ -65,14 +72,11 @@ class Shim implements MarkingStoreInterface
 
     public function getMarking($subject)
     {
+        $property = $this->getProperty();
         $subjectUuid = $this->getSubjectUuid($subject);
         $storeName = $this->getName();
-        $property = $this->getProperty();
         $mediator = $this->mediator;
         $places = $mediator->getPlaces($storeName, $subjectUuid, $property);
-        if (false === $places) {
-            throw new DomainException('Event dispatcher not set on mediator "%s"', strval($mediator));
-        }
         $transformer = new MarkingToPlacesTransformer();
         $marking = $transformer->reverseTransform($places);
         return $marking;
@@ -80,15 +84,12 @@ class Shim implements MarkingStoreInterface
 
     public function setMarking($subject, Marking $marking)
     {
-        $subjectUuid = $this->getSubjectId($subject);
-        $storeName = $this->getMarkingStoreId();
         $property = $this->getProperty();
+        $subjectUuid = $this->getSubjectId($subject);
+        $storeName = $this->getName();
         $transformer = new MarkingToPlacesTransformer();
         $places = $transformer->transform($marking);
         $mediator = $this->mediator;
-        $success = $mediator->setPlaces($storeName, $subjectUuid, $property, $places);
-        if (!$success) {
-            throw new DomainException('Event dispatcher not set on mediator "%s"', strval($mediator));
-        }
+        $mediator->setPlaces($storeName, $subjectUuid, $property, $places);
     }
 }

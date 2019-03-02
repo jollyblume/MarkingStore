@@ -14,8 +14,11 @@
         "symfony/workflow": "^4.2"
     },
     "require-dev": {
+        "phpunit/phpunit": "^7.5",
         "psr/log": "~1.1",
-        "phpunit/phpunit": "^7.5"
+        "ramsey/uuid": "@dev",
+        "symfony/event-dispatcher": "^4.2",
+        "symfony/property-access": "^4.2"
     },
     "config": {
         "preferred-install": {
