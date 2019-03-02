@@ -11,14 +11,13 @@
     ],
     "require": {
         "php": "^7.2",
+        "jollyblume/workflow-common": "@dev",
+        "ramsey/uuid": "@dev",
         "symfony/workflow": "^4.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.5",
         "psr/log": "~1.1",
-        "ramsey/uuid": "@dev",
-        "symfony/event-dispatcher": "^4.2",
-        "symfony/property-access": "^4.2"
+        "phpunit/phpunit": "^7.5"
     },
     "config": {
         "preferred-install": {
@@ -33,7 +32,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "JBJ\\Workflow\\": "../Workflow/lib",
             "JBJ\\Workflow\\MarkingStore\\Tests\\": "tests"
         }
     }
