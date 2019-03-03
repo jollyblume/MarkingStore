@@ -35,6 +35,12 @@ class DispatchingMediator implements MediatorInterface
         return $this->property;
     }
 
+    public function getPropertyAccessor()
+    {
+        $propertyAccessor = $this->propertyAccessor ?: $this->createPropertyAccessor();
+        return $propertyAccessor;
+    }
+
     protected function sendEvent(string $eventName, string $storeName, string $subjectUuid, string $property, $places = [])
     {
         $dispatcher = $this->getDispatcher();
@@ -65,11 +71,5 @@ class DispatchingMediator implements MediatorInterface
             $event = $this->sendEvent('workflow.places.set', $storeName, $subjectUuid, $property, $places);
         }
         return $event !== false;
-    }
-
-    public function getPropertyAccessor()
-    {
-        $propertyAccessor = $this->propertyAccessor ?: $this->createPropertyAccessor();
-        return $propertyAccessor;
     }
 }
