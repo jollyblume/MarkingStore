@@ -12,8 +12,8 @@
     "require": {
         "php": "^7.2",
         "jollyblume/workflow-common": "@dev",
-        "ramsey/uuid": "@dev",
-        "symfony/workflow": "^4.2"
+        "moontoast/math": "^1.1",
+        "ramsey/uuid": "@dev"
     },
     "require-dev": {
         "psr/log": "~1.1",
@@ -32,7 +32,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "JBJ\\Workflow\\MarkingStore\\Tests\\": "tests"
+            "JBJ\\Workflow\\Tests\\MarkingStore\\": "tests"
         }
     }
 }

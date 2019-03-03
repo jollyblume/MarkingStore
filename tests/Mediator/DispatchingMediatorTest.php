@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\MarkingStore\Tests\Mediator;
+namespace JBJ\Workflow\Tests\MarkingStore\Mediator;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
