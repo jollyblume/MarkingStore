@@ -13,7 +13,8 @@
         "php": "^7.2",
         "jollyblume/workflow-common": "@dev",
         "moontoast/math": "^1.1",
-        "ramsey/uuid": "@dev"
+        "ramsey/uuid": "@dev",
+        "symfony/messenger": "^4.2"
     },
     "require-dev": {
         "psr/log": "~1.1",
