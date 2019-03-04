@@ -47,7 +47,7 @@ class DispatchingMediator implements MediatorInterface
         if (!$dispatcher) {
             return false;
         }
-        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, $this, (array) $places);
+        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, (array) $places);
         return $dispatcher->dispatch($eventName, $event);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace JBJ\Workflow\MarkingStore\Tests\Event;
+namespace JBJ\Workflow\Tests\MarkingStore\Event;
 
 use JBJ\Workflow\MarkingStore\Event\MarkingStoreEvent;
 use JBJ\Workflow\MarkingStore\MediatorInterface;
@@ -44,18 +44,6 @@ class MarkingStoreEventTest extends TestCase
         $this->assertEquals($property, $event->getProperty());
     }
 
-    public function testGetMediator()
-    {
-        $storeName = 'test.store';
-        $subjectUuid = '20188abf-b9a6-456e-bf54-a397a219b86e';
-        $property = 'subjectId';
-        $mediator = $this->getMockBuilder(MediatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, $mediator);
-        $this->assertEquals($mediator, $event->getMediator());
-    }
-
     public function testGetPlaces()
     {
         $storeName = 'test.store';
@@ -70,7 +58,7 @@ class MarkingStoreEventTest extends TestCase
             'high.place',
             'low.place',
         ];
-        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, $mediator, $expectedPlaces);
+        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, $expectedPlaces);
         $this->assertEquals($expectedPlaces, $event->getPlaces());
     }
 }

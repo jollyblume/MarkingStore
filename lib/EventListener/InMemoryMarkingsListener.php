@@ -18,7 +18,6 @@ class InMemoryMarkingsListener implements EventSubscriberInterface
             'storeName' => $event->getStoreName(),
             'subjectUuid' => $event->getSubjectUuid(),
             'property' => $event->getProperty(),
-            'mediator' => $event->getMediator(),
             'places' => $event->getPlaces(),
         ];
         $msg = sprintf('[%s] %s', $method, $msg);

@@ -11,14 +11,12 @@ class MarkingStoreEvent extends WorkflowEvent
     private $subjectUuid;
     private $property;
     private $places;
-    private $mediator;
 
-    public function __construct(string $storeName, string $subjectUuid, string $property, MediatorInterface $mediator, $places = [])
+    public function __construct(string $storeName, string $subjectUuid, string $property, $places = [])
     {
         $this->storeName = $storeName;
         $this->subjectUuid = $subjectUuid;
         $this->property = $property;
-        $this->mediator = $mediator;
         $this->places = (array) $places;
     }
     public function getStoreName()
@@ -32,10 +30,6 @@ class MarkingStoreEvent extends WorkflowEvent
     public function getProperty()
     {
         return $this->property;
-    }
-    public function getMediator()
-    {
-        return $this->mediator;
     }
     public function getPlaces()
     {

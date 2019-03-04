@@ -109,7 +109,6 @@ class DispatchingMediatorTest extends TestCase
         $dispatcher->addSubscriber($subscriber);
         $mediator->setDispatcher($dispatcher);
         $this->assertTrue($mediator->notifyCreated('test.store', 'test.property'));
-        $this->assertEquals($mediator, $subscriber->getEvent()->getMediator());
         $this->assertEquals('test.store', $subscriber->getEvent()->getStoreName());
         $this->assertEquals('test.property', $subscriber->getEvent()->getProperty());
     }
@@ -122,7 +121,6 @@ class DispatchingMediatorTest extends TestCase
         $dispatcher->addSubscriber($subscriber);
         $mediator->setDispatcher($dispatcher);
         $this->assertInternalType('array', $mediator->getPlaces('test.store', 'test.subject.uuid', 'test.property'));
-        $this->assertEquals($mediator, $subscriber->getEvent()->getMediator());
         $this->assertEquals('test.store', $subscriber->getEvent()->getStoreName());
         $this->assertEquals('test.subject.uuid', $subscriber->getEvent()->getSubjectUuid());
         $this->assertEquals('test.property', $subscriber->getEvent()->getProperty());
@@ -137,7 +135,6 @@ class DispatchingMediatorTest extends TestCase
         $dispatcher->addSubscriber($subscriber);
         $mediator->setDispatcher($dispatcher);
         $this->assertTrue($mediator->setPlaces('test.store', 'test.subject.uuid', 'test.property', ['harry', 'sally']));
-        $this->assertEquals($mediator, $subscriber->getEvent()->getMediator());
         $this->assertEquals('test.store', $subscriber->getEvent()->getStoreName());
         $this->assertEquals('test.subject.uuid', $subscriber->getEvent()->getSubjectUuid());
         $this->assertEquals('test.property', $subscriber->getEvent()->getProperty());
@@ -173,7 +170,6 @@ class DispatchingMediatorTest extends TestCase
         $dispatcher->addSubscriber($subscriber);
         $mediator->setDispatcher($dispatcher);
         $this->assertTrue($mediator->notifyCreated('test.store', 'test.property'));
-        $this->assertEquals($mediator, $subscriber->getEvent()->getMediator());
         $this->assertEquals('test.store', $subscriber->getEvent()->getStoreName());
         $this->assertEquals('test.property', $subscriber->getEvent()->getProperty());
     }
