@@ -13,10 +13,7 @@ class MarkingStoreEventTest extends TestCase
         $storeName = 'test.store';
         $subjectUuid = '20188abf-b9a6-456e-bf54-a397a219b86e';
         $property = 'subjectId';
-        $mediator = $this->getMockBuilder(MediatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, $mediator);
+        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property);
         $this->assertEquals($storeName, $event->getStoreName());
     }
 
@@ -25,10 +22,7 @@ class MarkingStoreEventTest extends TestCase
         $storeName = 'test.store';
         $subjectUuid = '20188abf-b9a6-456e-bf54-a397a219b86e';
         $property = 'subjectId';
-        $mediator = $this->getMockBuilder(MediatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, $mediator);
+        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property);
         $this->assertEquals($subjectUuid, $event->getSubjectUuid());
     }
 
@@ -37,10 +31,7 @@ class MarkingStoreEventTest extends TestCase
         $storeName = 'test.store';
         $subjectUuid = '20188abf-b9a6-456e-bf54-a397a219b86e';
         $property = 'subjectId';
-        $mediator = $this->getMockBuilder(MediatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property, $mediator);
+        $event = new MarkingStoreEvent($storeName, $subjectUuid, $property);
         $this->assertEquals($property, $event->getProperty());
     }
 
@@ -49,9 +40,6 @@ class MarkingStoreEventTest extends TestCase
         $storeName = 'test.store';
         $subjectUuid = '20188abf-b9a6-456e-bf54-a397a219b86e';
         $property = 'subjectId';
-        $mediator = $this->getMockBuilder(MediatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $expectedPlaces = [
             'this.place',
             'that.place',
