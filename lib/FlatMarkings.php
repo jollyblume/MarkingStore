@@ -4,7 +4,7 @@ namespace JBJ\Workflow\MarkingStore;
 
 class FlatMarkings implements MarkingStoreInterface
 {
-    private $markings;
+    private $markings = [];
 
     public function __construct(Marking ...$markings)
     {
@@ -47,7 +47,7 @@ class FlatMarkings implements MarkingStoreInterface
         $markingName = $this->getMarkingName($storeName, $property, $subjectUuid);
         unset($this->markings[$markingName]);
         if (!empty($places)) {
-            $this->setMarking(new Marking($storeName, $property, $subjectUuid, $places));
+            $this->setMarking(new Marking($storeName, $property, $subjectUuid, ...$places));
         }
         return $this;
     }
