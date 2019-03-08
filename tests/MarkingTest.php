@@ -12,6 +12,7 @@ class MarkingTest extends TestCase
         $marking = new Marking('store', 'property');
         $this->assertEquals('store', $marking->getStoreName());
         $this->assertEquals('property', $marking->getProperty());
+        $this->assertEquals('', $marking->getSubjectUuid());
         $this->assertEquals([], $marking->getPlaces());
         $this->assertEquals('store/property', $marking->getName());
         $this->assertEquals('store/property', strval($marking));
@@ -25,24 +26,25 @@ class MarkingTest extends TestCase
         $this->assertEquals('store/property/subjectUuid', strval($marking));
     }
 
-    public function testDefaultsWithVariodicPlacesProvided()
+    public function testDefaultsWithPlacesProvided()
     {
-        $marking = new Marking('store', 'property', 'subjectUuid', 'here', 'there');
+        $marking = new Marking('store', 'property', 'subjectUuid', ['here', 'there']);
         $this->assertEquals(['here', 'there'], $marking->getPlaces());
     }
 
-    public function testDefaultsWithUnpackedPlacesProvided()
+    public function testDefaultsWithOnePlaceProvided()
     {
-        $marking = new Marking('store', 'property', 'subjectUuid', ...['here', 'there']);
-        $this->assertEquals(['here', 'there'], $marking->getPlaces());
+        $marking = new Marking('store', 'property', 'subjectUuid', 'everywhere');
+        $this->assertEquals(['everywhere'], $marking->getPlaces());
     }
 
     public function testCreateFrom()
     {
-        $marking = new Marking('store', 'property', 'subjectUuid', ...['here', 'there']);
+        $marking = new Marking('store', 'property', 'subjectUuid', ['here', 'there']);
         $newMarking = $marking->createFrom('everywhere');
         $this->assertEquals('store', $newMarking->getStoreName());
         $this->assertEquals('property', $newMarking->getProperty());
+        $this->assertEquals('subjectUuid', $marking->getSubjectUuid());
         $this->assertEquals(['everywhere'], $newMarking->getPlaces());
         $this->assertEquals('store/property/subjectUuid', $marking->getName());
     }

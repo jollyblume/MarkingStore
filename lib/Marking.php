@@ -9,20 +9,21 @@ final class Marking
     private $subjectUuid;
     private $places;
 
-    public function __construct(string $storeName, string $property, string $subjectUuid = '', string ...$places)
+    public function __construct(string $storeName, string $property, string $subjectUuid = '', $places = null)
     {
+        $places = null === $places ? [] : array_unique((array) $places);
         $this->storeName = $storeName;
         $this->property = $property;
         $this->subjectUuid = $subjectUuid;
         $this->places = array_unique($places);
     }
 
-    public function createFrom(string ...$places): Marking
+    public function createFrom($places): Marking
     {
         $storeName = $this->getStoreName();
         $property = $this->getProperty();
         $subjectUuid = $this->getSubjectUuid();
-        return new static($storeName, $property, $subjectUuid, ...$places);
+        return new static($storeName, $property, $subjectUuid, (array) $places);
     }
 
     public function getName(): string
